@@ -1,0 +1,66 @@
+{
+    "nav": {
+        "home": "Inicio",
+        "services": "Servicios",
+        "workers": "Buscar Técnicos",
+        "cart": "Carrito",
+        "customerMenu": {
+            "customerMenu": "Cliente",
+            "quote": "Solicitar Cotización",
+            "feedback": "Comentarios y Lealtad"
+        },
+        "adminMenu": {
+            "adminMenu": "Administrador",
+            "dashboard": "Panel de Administración",
+            "inventory": "Inventario"
+        },
+        "infoMenu": {
+            "infoMenu": "Información",
+            "about": "Sobre Nosotros",
+            "contact": "Contacto",
+            "enterprise": "Empresas"
+        }
+    },
+    "common": {
+        "addToCart": "Agregar al Carrito",
+        "requestQuote": "Solicitar Cotización",
+        "submit": "Enviar",
+        "cancel": "Cancelar",
+        "save": "Guardar",
+        "delete": "Eliminar",
+        "edit": "Editar",
+        "view": "Ver",
+        "search": "Buscar",
+        "filter": "Filtrar",
+        "loading": "Cargando...",
+        "noResults": "No se encontraron resultados"
+    },
+    "services": {
+        "title": "Nuestros Servicios",
+        "categories": {
+            "electrical-fencing": "Cerco Eléctrico",
+            "surveillance-cameras": "Cámaras de Vigilancia",
+            "painting": "Pintura",
+            "air-conditioning": "Aire Acondicionado",
+            "preventive-maintenance": "Mantenimiento Preventivo",
+            "home-emergency": "Emergencia del Hogar",
+            "industrial": "Industrial",
+            "commercial": "Comercial"
+        },
+        "sectors": {
+            "home": "Hogar",
+            "industrial": "Industrial",
+            "commercial": "Comercial"
+        }
+    },
+    "cart": {
+        "title": "Carrito de Compras",
+        "empty": "Tu carrito está vacío",
+        "total": "Total",
+        "checkout": "Proceder al Pago"
+    },
+    "currency": {
+        "USD": "Dólar Estadounidense",
+        "EUR": "Euro"
+    }
+}

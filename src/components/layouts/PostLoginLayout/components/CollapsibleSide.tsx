@@ -4,6 +4,8 @@ import SideNavToggle from '@/components/template/SideNavToggle'
 import MobileNav from '@/components/template/MobileNav'
 import UserProfileDropdown from '@/components//template/UserProfileDropdown'
 import LayoutBase from '@/components//template/LayoutBase'
+import Chatbot from '@/components/shared/Chatbot'
+import { LanguageSelector, CurrencySelector, CartButton } from '@/components/shared/HeaderExtras'
 import useResponsive from '@/utils/hooks/useResponsive'
 import { LAYOUT_COLLAPSIBLE_SIDE } from '@/constants/theme.constant'
 import type { CommonProps } from '@/@types/common'
@@ -28,9 +30,12 @@ const CollapsibleSide = ({ children }: CommonProps) => {
                             </>
                         }
                         headerEnd={
-                            <>
+                            <div className="flex items-center gap-2">
+                                <LanguageSelector />
+                                <CurrencySelector />
+                                <CartButton />
                                 <UserProfileDropdown hoverable={false} />
-                            </>
+                            </div>
                         }
                     />
                     <div className="h-full flex flex-auto flex-col">
@@ -38,6 +43,7 @@ const CollapsibleSide = ({ children }: CommonProps) => {
                     </div>
                 </div>
             </div>
+            <Chatbot />
         </LayoutBase>
     )
 }

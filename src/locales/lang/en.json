@@ -1,20 +1,66 @@
 {
     "nav": {
         "home": "Home",
-        "singleMenuItem": "Single menu item",
-        "collapseMenu": {
-            "collapseMenu": "Collapse menu item",
-            "item1": "Collapse menu item 1",
-            "item2": "Collapse menu item 2"
+        "services": "Services",
+        "workers": "Find Workers",
+        "cart": "Cart",
+        "customerMenu": {
+            "customerMenu": "Customer",
+            "quote": "Request Quote",
+            "feedback": "Feedback & Loyalty"
         },
-        "groupMenu": {
-            "groupMenu": "Group menu",
-            "single": "Group single menu item",
-            "collapse": {
-                "collapse": "Group collapse menu",
-                "item1": "Group collapse menu item 1",
-                "item2": "Group collapse menu item 2"
-            }
+        "adminMenu": {
+            "adminMenu": "Admin",
+            "dashboard": "Admin Dashboard",
+            "inventory": "Inventory"
+        },
+        "infoMenu": {
+            "infoMenu": "Information",
+            "about": "About Us",
+            "contact": "Contact",
+            "enterprise": "Enterprise"
         }
+    },
+    "common": {
+        "addToCart": "Add to Cart",
+        "requestQuote": "Request Quote",
+        "submit": "Submit",
+        "cancel": "Cancel",
+        "save": "Save",
+        "delete": "Delete",
+        "edit": "Edit",
+        "view": "View",
+        "search": "Search",
+        "filter": "Filter",
+        "loading": "Loading...",
+        "noResults": "No results found"
+    },
+    "services": {
+        "title": "Our Services",
+        "categories": {
+            "electrical-fencing": "Electric Fencing",
+            "surveillance-cameras": "Surveillance Cameras",
+            "painting": "Painting",
+            "air-conditioning": "Air Conditioning",
+            "preventive-maintenance": "Preventive Maintenance",
+            "home-emergency": "Home Emergency",
+            "industrial": "Industrial",
+            "commercial": "Commercial"
+        },
+        "sectors": {
+            "home": "Home",
+            "industrial": "Industrial",
+            "commercial": "Commercial"
+        }
+    },
+    "cart": {
+        "title": "Shopping Cart",
+        "empty": "Your cart is empty",
+        "total": "Total",
+        "checkout": "Proceed to Checkout"
+    },
+    "currency": {
+        "USD": "US Dollar",
+        "EUR": "Euro"
     }
 }
