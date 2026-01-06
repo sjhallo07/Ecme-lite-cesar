@@ -11,47 +11,64 @@ export const protectedRoutes: Routes = [
         component: lazy(() => import('@/views/Home')),
         authority: [],
     },
-    /** Example purpose only, please remove */
     {
-        key: 'singleMenuItem',
-        path: '/single-menu-view',
-        component: lazy(() => import('@/views/demo/SingleMenuView')),
+        key: 'services',
+        path: '/services',
+        component: lazy(() => import('@/views/services')),
         authority: [],
     },
     {
-        key: 'collapseMenu.item1',
-        path: '/collapse-menu-item-view-1',
-        component: lazy(() => import('@/views/demo/CollapseMenuItemView1')),
+        key: 'cart',
+        path: '/cart',
+        component: lazy(() => import('@/views/cart')),
         authority: [],
     },
     {
-        key: 'collapseMenu.item2',
-        path: '/collapse-menu-item-view-2',
-        component: lazy(() => import('@/views/demo/CollapseMenuItemView2')),
+        key: 'quote',
+        path: '/quote',
+        component: lazy(() => import('@/views/quote')),
         authority: [],
     },
     {
-        key: 'groupMenu.single',
-        path: '/group-single-menu-item-view',
-        component: lazy(() =>
-            import('@/views/demo/GroupSingleMenuItemView')
-        ),
+        key: 'workers',
+        path: '/workers',
+        component: lazy(() => import('@/views/workers')),
         authority: [],
     },
     {
-        key: 'groupMenu.collapse.item1',
-        path: '/group-collapse-menu-item-view-1',
-        component: lazy(() =>
-            import('@/views/demo/GroupCollapseMenuItemView1')
-        ),
+        key: 'about',
+        path: '/about',
+        component: lazy(() => import('@/views/about')),
         authority: [],
     },
     {
-        key: 'groupMenu.collapse.item2',
-        path: '/group-collapse-menu-item-view-2',
-        component: lazy(() =>
-            import('@/views/demo/GroupCollapseMenuItemView2')
-        ),
+        key: 'contact',
+        path: '/contact',
+        component: lazy(() => import('@/views/contact')),
+        authority: [],
+    },
+    {
+        key: 'feedback',
+        path: '/feedback',
+        component: lazy(() => import('@/views/feedback')),
+        authority: [],
+    },
+    {
+        key: 'enterprise',
+        path: '/enterprise',
+        component: lazy(() => import('@/views/enterprise')),
+        authority: [],
+    },
+    {
+        key: 'admin',
+        path: '/admin',
+        component: lazy(() => import('@/views/admin')),
+        authority: [],
+    },
+    {
+        key: 'inventory',
+        path: '/inventory',
+        component: lazy(() => import('@/views/inventory')),
         authority: [],
     },
 ]

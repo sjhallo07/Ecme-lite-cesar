@@ -1,31 +1,110 @@
-# Ecme - Lite
+# RepairPro - Professional Repair Services Application
 
-This is a lite version of Ecme - The Ultimate React, Vite & TypeScript Web Template
+A comprehensive web application focused on repair services, installation, and parts supply for home, industrial, and commercial sectors.
 
-Full version: [demo](https://ecme-react.themenate.net/) | [download](https://themeforest.net/item/ecme-the-ultimate-react-tailwind-admin-template/54470284)
+## Features
+
+### Service Categories
+- ⚡ Electrical Fencing Installation
+- 📹 Surveillance Camera Installation
+- 🎨 Professional Painting Services
+- ❄️ Air Conditioning Repairs & Installation
+- 🔧 Preventive Maintenance Programs
+- 🚨 Emergency Repair Services
+
+### Customer Features
+- 🛒 **Shopping Cart**: User-friendly cart to manage selected services
+- 📝 **Quote System**: Request quotes with optional inspection scheduling
+- 🗺️ **Worker Map**: Find available workers by zone with real-time location
+- ⭐ **Feedback System**: Rate services and earn loyalty points
+- 🎁 **Loyalty Program**: Discounts and coupons for repeat customers
+- 💬 **Chatbot**: AI-powered customer support assistant
+
+### Admin Features
+- 📊 **Admin Dashboard**: Full management of services and requests
+- 👷 **Worker Management**: Track workers, availability, and job status
+- 📦 **Inventory System**: Track parts and supplies
+- 📈 **Real-time Reports**: Job status and worker location tracking
+
+### Technical Features
+- 🌐 **Multilingual**: English and Spanish support
+- 💱 **Multi-currency**: USD and EUR support
+- 📱 **Responsive Design**: Works on all devices
+- 🎨 **Modern UI**: Animated interfaces with dark mode support
+
+## Tech Stack
+
+- **Frontend**: React 19, TypeScript, Vite
+- **Styling**: Tailwind CSS 4
+- **State Management**: Zustand
+- **Animations**: Framer Motion
+- **Internationalization**: i18next
+- **Maps**: Leaflet
+- **Backend (Planned)**: Node.js, Express
 
 ## Prerequisites
 
-- node
-- npm
-- yarn (optional)
+- Node.js 18+
+- npm or yarn
 
+## Installation
 
-## Installation and Run locally
+```bash
+# Install dependencies
+npm install
 
-To get started follow this steps:
+# Start development server
+npm run dev
 
-- Install packages: `npm install`.
-- Start the project locally: `npm run dev` (running on port 5173).
+# Build for production
+npm run build
 
-## Building Project
+# Preview production build
+npm run preview
+```
 
-To build the app for production run `npm run build`
+## Project Structure
 
+```
+src/
+├── @types/           # TypeScript types
+├── assets/           # Static assets and styles
+├── auth/             # Authentication logic
+├── components/       # React components
+│   ├── layouts/      # Layout components
+│   ├── shared/       # Shared components (Chatbot, etc.)
+│   ├── template/     # Template components
+│   └── ui/           # UI components
+├── configs/          # App configuration
+├── constants/        # Constants
+├── data/             # Static data
+├── locales/          # Translations
+├── services/         # API services
+├── store/            # Zustand stores
+├── utils/            # Utility functions
+└── views/            # Page components
+    ├── about/        # About page
+    ├── admin/        # Admin dashboard
+    ├── cart/         # Shopping cart
+    ├── contact/      # Contact page
+    ├── enterprise/   # Enterprise features
+    ├── feedback/     # Feedback & loyalty
+    ├── inventory/    # Inventory management
+    ├── quote/        # Quote request
+    ├── services/     # Services catalog
+    └── workers/      # Worker map
+```
 
-### Documentation
-[documentation](https://ecme-react.themenate.net/guide/documentation/introduction)
+## Future Integrations
 
-### Get [full version](https://themeforest.net/item/ecme-the-ultimate-react-tailwind-admin-template/54470284) to unclock all components & features
+- 💳 PayPal SDK for payments
+- 🛍️ Mercado Libre API
+- 📧 Email notifications
+- 📱 SMS notifications
+- 🔄 Real-time updates with Socket.io
+
+## License
+
+Private - All rights reserved
 
 

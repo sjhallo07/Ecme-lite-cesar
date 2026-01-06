@@ -23,6 +23,7 @@ export default tseslint.config(
                 '**/build/',
                 '**/node_modules/',
                 '**/dist/',
+                '**/backend/',
                 '**/.prettierrc.js',
                 '**/.eslintrc.js',
                 '**/env.d.ts',
