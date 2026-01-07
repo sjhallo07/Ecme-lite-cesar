@@ -29,6 +29,7 @@ backend/
 ## Planned Features
 
 ### Core APIs
+
 - **Services API**: CRUD operations for repair services
 - **Workers API**: Worker management, availability, and location tracking
 - **Quotes API**: Quote requests, processing, and status updates
@@ -36,6 +37,7 @@ backend/
 - **Auth API**: User authentication and authorization
 
 ### Future Integrations
+
 - **PayPal SDK**: Payment processing
 - **Mercado Libre API**: Marketplace integration
 - **Socket.io**: Real-time worker location tracking

@@ -1,10 +1,17 @@
 # RepairPro - Professional Repair Services Application
 
+![IBM Logo](https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg)
+
 A comprehensive web application focused on repair services, installation, and parts supply for home, industrial, and commercial sectors.
+
+## Author
+
+- Marcos Mora — Full Stack Developer (IBM assessment)
 
 ## Features
 
 ### Service Categories
+
 - ⚡ Electrical Fencing Installation
 - 📹 Surveillance Camera Installation
 - 🎨 Professional Painting Services
@@ -13,6 +20,7 @@ A comprehensive web application focused on repair services, installation, and pa
 - 🚨 Emergency Repair Services
 
 ### Customer Features
+
 - 🛒 **Shopping Cart**: User-friendly cart to manage selected services
 - 📝 **Quote System**: Request quotes with optional inspection scheduling
 - 🗺️ **Worker Map**: Find available workers by zone with real-time location
@@ -21,12 +29,14 @@ A comprehensive web application focused on repair services, installation, and pa
 - 💬 **Chatbot**: AI-powered customer support assistant
 
 ### Admin Features
+
 - 📊 **Admin Dashboard**: Full management of services and requests
 - 👷 **Worker Management**: Track workers, availability, and job status
 - 📦 **Inventory System**: Track parts and supplies
 - 📈 **Real-time Reports**: Job status and worker location tracking
 
 ### Technical Features
+
 - 🌐 **Multilingual**: English and Spanish support
 - 💱 **Multi-currency**: USD and EUR support
 - 📱 **Responsive Design**: Works on all devices
@@ -65,7 +75,7 @@ npm run preview
 
 ## Project Structure
 
-```
+```text
 src/
 ├── @types/           # TypeScript types
 ├── assets/           # Static assets and styles
@@ -103,8 +113,92 @@ src/
 - 📱 SMS notifications
 - 🔄 Real-time updates with Socket.io
 
+## Planned AI Enhancements
+
+- 🤖 AI service routing: intelligent assignment of requests to the best technician based on skills, location, and availability.
+- 🧠 Deep learning models: supervised and unsupervised training pipelines to improve predictions (eta, pricing, churn risk, demand forecasting).
+- 🧭 Agentic automation: autonomous workflow agents to orchestrate inspections, scheduling, inventory checks, and follow-ups.
+- 🚀 Production-ready MLOps: continuous retraining, evaluation, and rollout strategies with safeguards and canary releases.
+- 📈 Smart marketing automation: audience scoring, personalized offers, and campaign sequencing driven by model insights.
+- 🔐 Guardrails & governance: bias monitoring, drift detection, and human-in-the-loop review for critical decisions.
+
+## Architecture & Workflows (visual)
+
+### High-level component map
+
+```mermaid
+flowchart LR
+    subgraph Frontend [Frontend (Vite + React 19 + TS)]
+        UI[UI Components]
+        State[Zustand Stores]
+        I18n[i18next]
+        Maps[Leaflet]
+    end
+
+    subgraph Backend [Backend (Node/Express planned)]
+        API[REST API]
+        Auth[Auth & Tokens]
+        Services[Services/Quotes/Workers]
+        Inventory[Inventory]
+    end
+
+    subgraph Integrations [Integrations]
+        PayPal[PayPal SDK]
+        Mercado[Mercado Libre]
+        Notif[Email/SMS]
+    end
+
+    UI -->|Axios| API
+    State --> UI
+    I18n --> UI
+    Maps --> UI
+    API --> Services
+    API --> Inventory
+    API --> Auth
+    API --> PayPal
+    API --> Mercado
+    API --> Notif
+```
+
+### Service request workflow (happy path)
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant FE as Frontend
+    participant API as Backend API
+    participant Worker as Technician
+
+    User->>FE: Select service & location
+    FE->>API: POST /api/quotes (details)
+    API-->>API: Validate, price, queue task
+    API->>Worker: Assign job & notify
+    Worker->>API: Confirm availability
+    API-->>FE: Quote accepted + ETA
+    FE-->>User: Show confirmation & tracking
+```
+
+### AI/agentic automation loop (planned)
+
+```mermaid
+flowchart TD
+    Data[Telemetry & historical data]
+    Train[Supervised/unsupervised training]
+    Eval[Eval + drift checks]
+    Deploy[Canary/gradual deployment]
+    Agent[Agentic Orchestrator]
+    Actions[Scheduling, inventory, follow-ups, marketing]
+
+    Data --> Train --> Eval --> Deploy --> Agent --> Actions
+    Actions --> Data
+```
+
+![Architecture Diagram](public/img/diagrams/architecture.png)
+
 ## License
 
 Private - All rights reserved
 
+## Copyright
 
+© 2026 Marcos Mora. All rights reserved.
