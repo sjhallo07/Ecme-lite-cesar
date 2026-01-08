@@ -52,6 +52,51 @@ A comprehensive web application focused on repair services, installation, and pa
 - **Maps**: Leaflet
 - **Backend (Planned)**: Node.js, Express
 
+## Agent Proxy (Safe Fetch + Streaming)
+
+This project includes a secure Agent endpoint to safely proxy outbound HTTP requests from the frontend through the backend with strict guardrails and streaming support.
+
+Endpoint
+
+- POST /api/agent
+- Modes: JSON (non-stream) and SSE (streaming, default)
+- Default streaming uses Server‑Sent Events with a 15s heartbeat; NDJSON fallback is possible if an intermediary blocks SSE.
+
+Environment variables (backend/.env)
+
+- PORT: Backend port (default 3001)
+- AGENT_HOST_ALLOWLIST: CSV of allowed hostnames, supports leading wildcard for Azure OpenAI (default: localhost, 127.0.0.1, api.openai.com, *.openai.azure.com)
+- AGENT_TIMEOUT_MS: Upstream timeout (default 60000)
+- AGENT_MAX_REQ_BODY: Max request body bytes (default 262144)
+- AGENT_MAX_NONSTREAM_RESP: Max non‑stream response bytes (default 2097152)
+- AGENT_SSE_HEARTBEAT_MS: SSE heartbeat interval ms (default 15000)
+
+Guardrails & limits
+
+- Host allowlist enforced; non‑allowlisted hosts are rejected
+- Methods: GET, POST only; POST must be application/json
+- Header allowlist: Accept, Content‑Type, Authorization; hop‑by‑hop headers stripped
+- Request body cap: 256 KB; non‑stream response cap: 2 MB
+- Timeout: 60 seconds; graceful error and stream close
+- Secrets: Authorization redacted from logs and never echoed back
+
+Dev proxy
+
+- Vite dev proxy forwards /api → <http://localhost:3001> so the frontend can reach the backend Agent endpoint during development
+
+Usage
+
+- Non‑stream: POST JSON payload to /api/agent and receive a structured JSON response
+- Stream: POST with Accept: text/event-stream to /api/agent and consume meta/chunk/done events; heartbeat comments are emitted roughly every 15 seconds
+
+Troubleshooting
+
+- SSE blocked by proxy: enable NDJSON fallback or use non‑stream mode
+- 403 forbidden host: add hostname to AGENT_HOST_ALLOWLIST
+- 413 payload too large: reduce input or increase AGENT_MAX_REQ_BODY cautiously
+- 415 unsupported media type: use application/json for POST
+- Timeout: reduce upstream work or increase AGENT_TIMEOUT_MS cautiously
+
 ## Prerequisites
 
 - Node.js 18+
