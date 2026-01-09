@@ -8,9 +8,11 @@ import Chatbot from '@/components/shared/Chatbot'
 import { LanguageSelector, CurrencySelector, CartButton } from '@/components/shared/HeaderExtras'
 import useResponsive from '@/utils/hooks/useResponsive'
 import { LAYOUT_COLLAPSIBLE_SIDE } from '@/constants/theme.constant'
+import { APP_NAME } from '@/constants/app.constant'
 import type { CommonProps } from '@/@types/common'
 
-const CollapsibleSide = ({ children }: CommonProps) => {
+const CollapsibleSide = ({ children }: CommonProps) =>
+{
     const { larger, smaller } = useResponsive()
 
     return (
@@ -28,6 +30,11 @@ const CollapsibleSide = ({ children }: CommonProps) => {
                                 {smaller.lg && <MobileNav />}
                                 {larger.lg && <SideNavToggle />}
                             </>
+                        }
+                        headerMiddle={
+                            <div className="text-base md:text-lg font-semibold truncate">
+                                {APP_NAME}
+                            </div>
                         }
                         headerEnd={
                             <div className="flex items-center gap-2">

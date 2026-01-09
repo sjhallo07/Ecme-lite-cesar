@@ -1,18 +1,19 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import {
-    PiWrenchDuotone,
-    PiShieldCheckDuotone,
-    PiVideoCameraDuotone,
-    PiPaintBrushDuotone,
-    PiSnowflakeDuotone,
-    PiGearDuotone,
-    PiArrowRightDuotone,
-    PiStarFill,
-    PiUsersDuotone,
-    PiCheckCircleDuotone,
-    PiClockDuotone,
-} from 'react-icons/pi'
+import
+    {
+        PiWrenchDuotone,
+        PiShieldCheckDuotone,
+        PiVideoCameraDuotone,
+        PiPaintBrushDuotone,
+        PiSnowflakeDuotone,
+        PiGearDuotone,
+        PiArrowRightDuotone,
+        PiStarFill,
+        PiUsersDuotone,
+        PiCheckCircleDuotone,
+        PiClockDuotone,
+    } from 'react-icons/pi'
 import Button from '@/components/ui/Button'
 import { servicesData } from '@/data/services.data'
 import { useCurrencyStore } from '@/store/currencyStore'
@@ -33,7 +34,8 @@ const stats = [
     { value: '98%', label: 'Satisfaction Rate' },
 ]
 
-const Home = () => {
+const Home = () =>
+{
     const formatPrice = useCurrencyStore((state) => state.formatPrice)
     const featuredServices = servicesData.slice(0, 3)
 
@@ -196,7 +198,7 @@ const Home = () => {
             <div className="mb-16">
                 <div className="text-center mb-10">
                     <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-3">
-                        Why Choose RepairPro?
+                        Why Choose SERVILOGICS SERVICE APP?
                     </h2>
                     <p className="text-gray-600 dark:text-gray-400">
                         We&apos;re committed to delivering exceptional service every time

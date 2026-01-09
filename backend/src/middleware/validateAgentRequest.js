@@ -16,7 +16,7 @@ export default function validateAgentRequest(req, res, next) {
         return res.status(400).json({ ok: false, error: { code: 'invalid_json', message: 'Expected JSON object body' } })
     }
 
-    const { request = {}, mode, stream } = body
+    const { request = {}, mode, stream, context = {} } = body
     const { url, method, headers = {}, body: payload } = request
 
     if (!url || !method) {
@@ -69,6 +69,44 @@ export default function validateAgentRequest(req, res, next) {
         method: upperMethod,
         headers: forwardHeaders,
         payload,
+        context: sanitizeContext(context),
     }
     next()
+}
+
+function sanitizeContext(ctx) {
+    const out = {}
+    if (!ctx || typeof ctx !== 'object') return out
+    const pick = (k) => {
+        const v = ctx[k]
+        if (v !== undefined && v !== null) out[k] = v
+    }
+    pick('requestId')
+    pick('correlationId')
+    pick('causationId')
+    pick('eventType')
+    pick('sessionId')
+    pick('userId')
+    pick('tenantId')
+    pick('agentId')
+    pick('agentVersion')
+    pick('step')
+    pick('status')
+    pick('timestamp')
+    pick('locale')
+    pick('timezone')
+    pick('channel')
+    pick('source')
+    pick('model')
+    pick('metrics')
+    // Subject
+    if (ctx.subject && typeof ctx.subject === 'object') {
+        out.subject = {
+            type: String(ctx.subject.type || ''),
+            id: String(ctx.subject.id || ''),
+        }
+    }
+    // Tags
+    if (Array.isArray(ctx.tags)) out.tags = ctx.tags.map(String)
+    return out
 }

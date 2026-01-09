@@ -1,6 +1,7 @@
 {
     "recommendations": [
         "anthropic.claude-code",
-        "eamodio.gitlens"
+        "eamodio.gitlens",
+        "msjsdiag.vscode-react-native"
     ]
 }

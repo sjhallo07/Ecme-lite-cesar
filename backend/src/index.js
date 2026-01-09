@@ -67,6 +67,30 @@ if (process.env.NODE_ENV !== 'test') {
     app.listen(PORT, () => {
         console.log(`🚀 RepairPro API server running on port ${PORT}`)
         console.log(`📍 Health check: http://localhost:${PORT}/api/health`)
+        // Lazy-load events router and Mongo only outside tests
+        // Lazy-load uploads router
+        import('./routes/uploads.js')
+            .then(({ default: uploadsRouter }) => {
+                app.use('/api/uploads', uploadsRouter)
+            })
+            .catch((e) => {
+                console.warn('⚠️ Uploads route init failed:', e.message)
+            })
+
+        // Lazy-load events router
+        import('./routes/events.js')
+            .then(({ default: eventsRouter }) => {
+                app.use('/api/events', eventsRouter)
+                return import('./utils/db.js')
+            })
+            .then(({ connectMongo, ensureIndexes }) => {
+                return connectMongo().then(() => ensureIndexes()).catch((e) => {
+                    console.warn('⚠️ Mongo connection failed:', e.message)
+                })
+            })
+            .catch((e) => {
+                console.warn('⚠️ Events route init failed:', e.message)
+            })
     })
 }
 

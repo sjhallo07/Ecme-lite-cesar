@@ -11,6 +11,8 @@ node_modules
 dist
 dist-ssr
 build
+uploads/
+backend/uploads/
 *.local
 .env
 

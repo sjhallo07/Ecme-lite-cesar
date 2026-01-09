@@ -7,7 +7,7 @@ import { safeFetch } from '../utils/safeFetch.js'
 const router = Router()
 
 router.post('/agent', validateAgentRequest, async (req, res) => {
-    const { mode, url, method, headers, payload } = req.agent
+    const { mode, url, method, headers, payload, context } = req.agent
 
     // Non-stream JSON mode
     if (mode === 'json') {
@@ -21,7 +21,7 @@ router.post('/agent', validateAgentRequest, async (req, res) => {
                 responseLimitBytes: MAX_NONSTREAM_RESP_BYTES,
                 stream: false,
             })
-            return res.status(200).json({ ok: true, status: result.status, url, headers: result.headers, data: result.data })
+            return res.status(200).json({ ok: true, status: result.status, url, headers: result.headers, data: result.data, context })
         } catch (e) {
             const code = e?.code || 'upstream_error'
             const status = code === 'response_too_large' ? 502 : 502
@@ -47,15 +47,15 @@ router.post('/agent', validateAgentRequest, async (req, res) => {
             stream: true,
         })
 
-        writeEvent(res, { event: 'meta', data: { status: upstream.status, url, headers: upstream.headers } })
+        writeEvent(res, { event: 'meta', data: { status: upstream.status, url, headers: upstream.headers, context } })
 
         for await (const chunk of upstream.chunks()) {
             if (closed) break
-            writeEvent(res, { event: 'chunk', data: chunk })
+            writeEvent(res, { event: 'chunk', data: { text: chunk, context } })
         }
-        if (!closed) writeEvent(res, { event: 'done', data: {} })
+        if (!closed) writeEvent(res, { event: 'done', data: { context } })
     } catch (e) {
-        if (!closed) writeEvent(res, { event: 'error', data: { code: e?.code || 'upstream_error', message: String(e.message || 'error') } })
+        if (!closed) writeEvent(res, { event: 'error', data: { code: e?.code || 'upstream_error', message: String(e.message || 'error'), context } })
     } finally {
         stop()
         if (!res.writableEnded) res.end()
