@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - ".github/workflows/**"
+      - "src/**"
+      - "public/**"
+      - "package.json"
+      - "tsconfig.json"
+  pull_request:
+    branches: [ main, master ]
+    paths:
+      - ".github/workflows/**"
+      - "src/**"
+      - "public/**"
+      - "package.json"
+      - "tsconfig.json"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  node:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 1 }
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run build --if-present
+      - run: npm test -- --ci --passWithNoTests
