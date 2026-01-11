@@ -13,6 +13,7 @@ on:
   pull_request:
     branches: [ main, master ]
     paths:
+      - ".github/workflows/**"
       - "src/**"
       - "public/**"
       - "package.json"
@@ -37,4 +38,4 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build --if-present
-      - run: npm run test --if-present -- --ci --passWithNoTests
+      - run: npm run test --if-present

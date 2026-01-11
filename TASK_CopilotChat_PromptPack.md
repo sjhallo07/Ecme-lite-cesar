@@ -11,7 +11,7 @@ Prompt:
 - minimize GitHub Actions minutes and storage
 - keep Codespaces cost at $0 with autosuspend
 - add a minimal devcontainer
-- add a cost‑efficient CI workflow with filtered paths, fetch-depth: 1, caching, and 10–15 min timeouts
+- add a cost-efficient CI workflow with filtered paths, fetch-depth: 1, caching, and 10–15 min timeouts
 Return: a prioritized checklist per repo with concrete file changes."
 
 ## 2) Minimal CI workflow per stack
