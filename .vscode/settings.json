@@ -8,6 +8,5 @@
   },
   "[typescript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
   "[javascript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
-  "prettier.useEditorConfig": true,
-  "github.copilot.inlineSuggest.enable": true
+  "prettier.useEditorConfig": true
 }
