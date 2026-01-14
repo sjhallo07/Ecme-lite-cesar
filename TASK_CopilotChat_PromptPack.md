@@ -1,122 +1,158 @@
 # Copilot Chat – Best Prompts Pack (Editor, CI, Devcontainers, Cost Optimization)
 
-How to use:
-- Open Copilot Chat and paste any prompt below.
-- Replace placeholders like <repo>, <path>, <goal>, <limit>.
-- Keep messages short; ask for a plan first, then iterate.
+This document provides a curated set of high-quality prompts for GitHub Copilot Chat to help you work efficiently with CI/CD workflows, devcontainers, and cost optimization strategies.
 
-## 1) Project analysis and plan
-Prompt:
-"You are my pair programmer. Analyze this workspace and identify tech stacks (Node/Python/Rust/Solidity), build/test commands, and CI/devcontainer gaps. Propose a step-by-step plan to:
-- minimize GitHub Actions minutes and storage
-- keep Codespaces cost at $0 with autosuspend
-- add a minimal devcontainer
-- add a cost-efficient CI workflow with filtered paths, fetch-depth: 1, caching, and 10–15 min timeouts
-Return: a prioritized checklist per repo with concrete file changes."
+## 🚀 CI/CD & GitHub Actions
 
-## 2) Minimal CI workflow per stack
-Prompt:
-"Generate a minimal GitHub Actions CI workflow for this project with:
-- push/pull_request on branches [main, master]
-- filtered paths for src/lib/app/backend/server/client/public
-- concurrency cancellation
-- shallow checkout (fetch-depth: 1)
-- cache dependencies
-- Node job if package.json exists (npm ci, build if present, tests if present)
-- Python job if requirements.txt exists (pip cache, pytest -q || true)
-- Rust job if Cargo.lock exists (cache cargo, build/test locked)
-Keep total runtime under 15 minutes and provide the final YAML."
+### Optimize Workflow Performance
+```
+Analyze this GitHub Actions workflow and suggest optimizations to reduce execution time and Actions minutes usage. Focus on caching, concurrency, and conditional job execution.
+```
 
-## 3) Devcontainer minimal
-Prompt:
-"Create a minimal devcontainer.json for this repo:
-- base image (Node 20, Python 3.11, Rust stable, or Ubuntu base as appropriate)
-- no heavy postCreate commands (use 'true')
-- VS Code extensions only for the detected stack
-- editor defaults: formatOnSave and autoSave on focus change
-Return the final devcontainer.json."
+### Debug Failed Workflow
+```
+This workflow is failing at [step name]. Review the logs and workflow definition to identify the root cause and suggest a fix.
+```
 
-## 4) VS Code editor smart settings
-Prompt:
-"Produce a .vscode/settings.json that:
-- enables formatOnSave
-- sets Prettier as default formatter for TS/JS
-- organizes imports and fixAll on save
-- enables basic Python type checking and pytest discovery
-- enables inline Copilot suggestions
-Return the final JSON."
+### Add Cost-Efficient Tests
+```
+Add a test job to this CI workflow that runs only when relevant files change, uses caching effectively, and passes with --passWithNoTests when no tests exist.
+```
 
-## 5) Branch protection guidance (post GitHub Pro)
-Prompt:
-"Given we have GitHub Pro, outline exact steps in GitHub Settings to add branch protection rules on main/master:
-- require PR before merging
-- require status checks 'CI' to pass
-- require code owner reviews
-- dismiss stale approvals on new commits
-Explain each click path in the UI and any caveats."
+## 🐳 Devcontainers
 
-## 6) Cost optimization audit (use our CSV)
-Prompt:
-"I will paste a usage CSV. Analyze Actions minutes, storage, Codespaces compute/storage, and Copilot premium requests. Recommend specific changes (workflows, paths, caches, timeouts, autosuspend, weekly cleanup) to keep metered costs at $0. Return a prioritized action list."
+### Create Minimal Devcontainer
+```
+Create a minimal devcontainer.json for a [language/framework] project that installs only essential extensions and tools to minimize build time and storage.
+```
 
-## 7) Prompt to generate tests quickly
-Prompt:
-"Infer testing strategy from this project and generate fast, deterministic unit tests for the most critical modules. Prefer minimal dependencies, short runtime, and skip heavy integration steps. Return test files and commands to run them locally and in CI."
+### Optimize Devcontainer Build Time
+```
+Review this devcontainer configuration and suggest ways to reduce build time and image size. Consider using pre-built images and minimal feature sets.
+```
 
-## 8) Security and dependency updates
-Prompt:
-"Scan this project for outdated or vulnerable dependencies and propose safe upgrades (pin exact versions). Explain risk, changelog highlights, and required code changes. Provide a small PR plan with test steps."
+### Debug Devcontainer Issues
+```
+My devcontainer is failing to build/start with [error message]. Help me diagnose and fix the issue.
+```
 
-## 9) PR description template with checklists
-Prompt:
-"Write a PR description for 'Optimize CI/devcontainer/CODEOWNERS' including:
-- summary
-- changes list (files added/updated)
-- cost impact (Actions minutes, Codespaces autosuspend)
-- validation steps (CI passing or skipped appropriately)
-- rollback plan
-Return Markdown ready to paste."
+## 💰 Cost Optimization
 
-## 10) Repo-wide refactor plan (low risk)
-Prompt:
-"Propose low-risk refactors to improve maintainability without changing public behavior:
-- lint/format setup
-- folder structure rationalization
-- small performance wins
-- documentation updates
-Provide a 3–5 step plan with estimated effort and tests to confirm behavior."
+### Reduce GitHub Actions Minutes
+```
+Audit this repository's CI/CD workflows and suggest specific changes to reduce Actions minutes usage by at least 30% while maintaining test coverage.
+```
 
-## 11) Claude (via Continue) deep architecture prompt
-Prompt:
-"Analyze the full project architecture, list components and data flows, identify bottlenecks and test gaps, and propose CI/devcontainer improvements to reduce time and resource usage while keeping metered spend at $0. Suggest concrete file changes."
+### Optimize Codespaces Usage
+```
+Review this project's devcontainer and VS Code settings to minimize Codespaces compute time. Focus on startup performance and automatic shutdown configurations.
+```
 
-## 12) Multi-file change protocol
-Prompt:
-"When proposing changes, follow this protocol:
-- Plan first (bullet list, files to edit/add)
-- Show complete file contents for new files
-- For existing files, show minimal diffs
-- Keep Actions job timeouts ≤ 15 min, use fetch-depth: 1 and caches
-- If uncertain, ask clarifying questions before finalizing
-Confirm before proceeding."
+### Implement Smart Caching
+```
+Add intelligent caching to this workflow for [package manager] dependencies to avoid unnecessary reinstalls and reduce CI execution time.
+```
 
-## 13) Quick "fix" prompt for noisy CI
-Prompt:
-"Our CI is noisy or slow. Identify the slowest steps and propose:
-- path filters
-- concurrency cancellation strategy
-- test sharding or skipping flaky integration tests
-- smarter caching keys
-Return a patch for the workflow."
+## 🔧 VS Code & Editor Settings
 
-## 14) Workspace extensions recommendation
-Prompt:
-"Generate a .vscode/extensions.json with recommended extensions based on detected languages (Copilot, Copilot Chat, ESLint/Prettier, Python/Pylance, Rust Analyzer, Solidity). Keep it minimal."
+### Setup Format-on-Save
+```
+Configure VS Code settings for this [language] project with format-on-save, auto-import organization, and consistent linting across the team.
+```
 
-## 15) Budget & alerts checklist
-Prompt:
-"Write the steps to configure GitHub Budgets and alerts:
-- Actions $0 budget, alert at $0.50
-- Codespaces $0 budget, alert at $0.50
-- Models/Spark $0 budget, alert at $0.10
-Include navigation paths and verification of 'Metered usage'."
+### Optimize Extensions
+```
+Review this project's recommended VS Code extensions and suggest a minimal set that provides the best developer experience without bloat.
+```
+
+## 📋 Code Quality & Review
+
+### Generate CODEOWNERS
+```
+Create a CODEOWNERS file for this repository based on the current directory structure and team ownership patterns.
+```
+
+### Setup Pre-commit Checks
+```
+Add a pre-commit or pre-push hook that runs linting and formatting checks locally to catch issues before CI runs.
+```
+
+### Implement Path Filters
+```
+Update this CI workflow to only run when relevant files change, using path filters for source code, dependencies, and configuration files.
+```
+
+## 🎯 Specific Scenarios
+
+### React/TypeScript Project Setup
+```
+Setup a cost-efficient CI workflow and devcontainer for a React TypeScript project using Vite. Include build, test, and lint jobs with smart path filtering.
+```
+
+### Node.js Project Optimization
+```
+Optimize this Node.js project's CI workflow to use npm ci with caching, run tests only when needed, and complete in under 5 minutes.
+```
+
+### Multi-Language Repository
+```
+Configure CI for a monorepo with [languages] that runs only relevant jobs based on which parts of the codebase changed.
+```
+
+## 💡 Best Practices
+
+### Ask for Explanations
+```
+Explain why [specific configuration/pattern] is used in this [workflow/devcontainer/settings] and suggest any modern alternatives.
+```
+
+### Review for Security
+```
+Review this [workflow/configuration] for security best practices, including secrets handling, permissions, and dependency management.
+```
+
+### Validate Configuration
+```
+Validate this [YAML/JSON] configuration file for syntax errors and common mistakes before committing.
+```
+
+## 📊 Monitoring & Metrics
+
+### Track Actions Usage
+```
+Help me understand this repository's GitHub Actions usage patterns and identify the most expensive workflows to optimize first.
+```
+
+### Measure Build Performance
+```
+Add timing measurements to this workflow to identify which steps take the longest and could benefit from optimization.
+```
+
+## 🔄 Workflow Patterns
+
+### Concurrency Control
+```
+Add concurrency controls to this workflow to cancel outdated runs and prevent wasting Actions minutes on superseded commits.
+```
+
+### Matrix Strategy
+```
+Setup a matrix strategy for testing across [versions/platforms] while minimizing total execution time through parallelization.
+```
+
+### Conditional Execution
+```
+Make this workflow job run only when [specific conditions] are met to avoid unnecessary CI runs.
+```
+
+---
+
+## Tips for Effective Copilot Chat Usage:
+
+1. **Be Specific**: Include file names, error messages, and context
+2. **Iterative Refinement**: Start broad, then ask follow-up questions to drill down
+3. **Request Explanations**: Always ask "why" to understand the reasoning
+4. **Validate Suggestions**: Test recommendations in a safe environment first
+5. **Combine Prompts**: Use multiple prompts together for comprehensive solutions
+
+Remember: The goal is to minimize metered spend (Actions minutes, Codespaces hours) while maintaining productivity and code quality.
