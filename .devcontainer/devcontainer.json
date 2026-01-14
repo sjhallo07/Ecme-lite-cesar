@@ -1,19 +1,6 @@
 {
-  "name": "Ecme Lite Dev",
+  "name": "React TS Devcontainer",
   "image": "mcr.microsoft.com/devcontainers/node:20",
-  "forwardPorts": [5173, 3001],
   "postCreateCommand": "true",
-  "customizations": {
-    "vscode": {
-      "extensions": [
-        "dbaeumer.vscode-eslint",
-        "esbenp.prettier-vscode",
-        "bradlc.vscode-tailwindcss"
-      ],
-      "settings": {
-        "files.autoSave": "onFocusChange",
-        "editor.formatOnSave": true
-      }
-    }
-  }
+  "customizations": { "vscode": { "extensions": ["ms-vscode.vscode-typescript-next", "esbenp.prettier-vscode", "dbaeumer.vscode-eslint", "github.copilot", "github.copilot-chat"] } }
 }
