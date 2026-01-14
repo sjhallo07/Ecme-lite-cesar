@@ -1,15 +1,16 @@
-import SideNav from '@/components/template/SideNav'
-import Header from '@/components/template/Header'
-import SideNavToggle from '@/components/template/SideNavToggle'
-import MobileNav from '@/components/template/MobileNav'
-import UserProfileDropdown from '@/components//template/UserProfileDropdown'
-import LayoutBase from '@/components//template/LayoutBase'
-import Chatbot from '@/components/shared/Chatbot'
-import { LanguageSelector, CurrencySelector, CartButton } from '@/components/shared/HeaderExtras'
-import useResponsive from '@/utils/hooks/useResponsive'
-import { LAYOUT_COLLAPSIBLE_SIDE } from '@/constants/theme.constant'
-import { APP_NAME } from '@/constants/app.constant'
 import type { CommonProps } from '@/@types/common'
+import LayoutBase from '@/components//template/LayoutBase'
+import UserProfileDropdown from '@/components//template/UserProfileDropdown'
+import { HealthStatus } from '@/components/shared'
+import Chatbot from '@/components/shared/Chatbot'
+import { CartButton, CurrencySelector, LanguageSelector } from '@/components/shared/HeaderExtras'
+import Header from '@/components/template/Header'
+import MobileNav from '@/components/template/MobileNav'
+import SideNav from '@/components/template/SideNav'
+import SideNavToggle from '@/components/template/SideNavToggle'
+import { APP_NAME } from '@/constants/app.constant'
+import { LAYOUT_COLLAPSIBLE_SIDE } from '@/constants/theme.constant'
+import useResponsive from '@/utils/hooks/useResponsive'
 
 const CollapsibleSide = ({ children }: CommonProps) =>
 {
@@ -37,10 +38,11 @@ const CollapsibleSide = ({ children }: CommonProps) =>
                             </div>
                         }
                         headerEnd={
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-3">
                                 <LanguageSelector />
                                 <CurrencySelector />
                                 <CartButton />
+                                <HealthStatus intervalMs={15000} />
                                 <UserProfileDropdown hoverable={false} />
                             </div>
                         }
