@@ -4,7 +4,7 @@
   "postCreateCommand": "true",
   "customizations": {
     "vscode": {
-      "extensions": ["ms-vscode.vscode-typescript-next", "esbenp.prettier-vscode"],
+      "extensions": ["ms-vscode.vscode-typescript-next", "esbenp.prettier-vscode", "dbaeumer.vscode-eslint"],
       "settings": { "files.autoSave": "onFocusChange", "editor.formatOnSave": true }
     }
   }

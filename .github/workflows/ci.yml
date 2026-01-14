@@ -7,16 +7,20 @@ on:
       - ".github/workflows/**"
       - "src/**"
       - "public/**"
+      - "backend/**"
       - "package.json"
       - "tsconfig.json"
+      - "vite.config.ts"
   pull_request:
     branches: [ main, master ]
     paths:
       - ".github/workflows/**"
       - "src/**"
       - "public/**"
+      - "backend/**"
       - "package.json"
       - "tsconfig.json"
+      - "vite.config.ts"
   workflow_dispatch:
 
 concurrency:
@@ -37,3 +41,8 @@ jobs:
       - run: npm ci
       - run: npm run build --if-present
       - run: npm test -- --ci --passWithNoTests
+      - name: Backend tests
+        run: |
+          cd backend
+          npm ci
+          npm test
