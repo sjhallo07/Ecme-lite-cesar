@@ -401,21 +401,25 @@ npm run build
 ## Troubleshooting Integration
 
 ### Routes not found
+
 - Check route path matches component path
 - Verify imports are correct
 - Check `AllRoutes.tsx` includes route
 
 ### Components not rendering
+
 - Check authority permissions
 - Verify user role is set in localStorage
 - Check browser console for errors
 
 ### API calls failing
+
 - Verify backend running on port 3001
 - Check Vite proxy config
 - Verify role parameter in localStorage
 
 ### Photos not showing
+
 - Check `backend/uploads/workers/` exists
 - Verify backend serves static files
 - Check photo URL in browser dev tools
@@ -439,4 +443,3 @@ npm run build
 - `QUICKSTART_MAP_DATA.md` - Quick reference guide
 - Backend: `src/routes/workers.js`
 - Frontend: `src/services/WorkerService.ts`
-

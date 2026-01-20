@@ -35,17 +35,20 @@ A production-ready real-time worker location mapping system with:
 ## 🚀 Quick Start (5 minutes)
 
 ### 1. Start Backend
+
 ```bash
 cd backend
 npm start
 ```
 
 ### 2. Start Frontend
+
 ```bash
 npm run dev
 ```
 
 ### 3. Test It
+
 ```bash
 # In your browser, set localStorage:
 localStorage.setItem('auth', JSON.stringify({
@@ -58,6 +61,7 @@ localStorage.setItem('auth', JSON.stringify({
 ```
 
 ### 4. Test API
+
 ```bash
 curl http://localhost:3001/api/workers?role=admin
 ```
@@ -67,17 +71,20 @@ curl http://localhost:3001/api/workers?role=admin
 ## 📁 Files Created
 
 ### Backend (3)
+
 - ✅ `backend/src/routes/workers.js` - Worker API
 - ✅ `backend/uploads/workers/` - Photo storage
 - ✅ `backend/src/index.js` - Modified
 
 ### Frontend (4)
+
 - ✅ `src/services/WorkerService.ts` - API service
 - ✅ `src/utils/rbac.ts` - Role-based access
 - ✅ `src/views/workers/WorkersMapEnhanced.tsx` - Map component
 - ✅ `src/views/admin/WorkerManagement.tsx` - Admin panel
 
 ### Documentation (5)
+
 - ✅ `MAP_DATA_IMPLEMENTATION.md` - Complete API docs
 - ✅ `QUICKSTART_MAP_DATA.md` - Quick reference
 - ✅ `INTEGRATION_GUIDE.md` - How to integrate
@@ -89,6 +96,7 @@ curl http://localhost:3001/api/workers?role=admin
 ## 🔐 User Roles
 
 ### Admin
+
 - View all workers with details
 - Create/edit/delete workers
 - Upload worker photos
@@ -96,12 +104,14 @@ curl http://localhost:3001/api/workers?role=admin
 - Access admin dashboard
 
 ### Staff
+
 - View all workers
 - Update own location (real-time GPS)
 - Change own availability
 - See worker contact info
 
 ### Client
+
 - View available workers only
 - See basic info (name, rating, specialties)
 - Call/email workers
@@ -112,6 +122,7 @@ curl http://localhost:3001/api/workers?role=admin
 ## 🗺️ Features
 
 ### Interactive Map
+
 - Leaflet-based mapping
 - Color-coded markers (green=available, yellow=busy, gray=offline)
 - Click markers for worker details
@@ -119,6 +130,7 @@ curl http://localhost:3001/api/workers?role=admin
 - Real-time location updates
 
 ### Photo System
+
 - Admin upload photos
 - JPEG, PNG, WEBP support
 - 5MB file size limit
@@ -126,6 +138,7 @@ curl http://localhost:3001/api/workers?role=admin
 - Persistent storage
 
 ### Admin Dashboard
+
 - Worker management table
 - Create new workers
 - Edit worker details
@@ -134,6 +147,7 @@ curl http://localhost:3001/api/workers?role=admin
 - Photo upload interface
 
 ### API
+
 - 9 RESTful endpoints
 - Real-time location tracking
 - Availability management
@@ -145,6 +159,7 @@ curl http://localhost:3001/api/workers?role=admin
 ## 🔗 How to Integrate
 
 ### Step 1: Add to Routes
+
 ```typescript
 // In your routes configuration
 {
@@ -155,6 +170,7 @@ curl http://localhost:3001/api/workers?role=admin
 ```
 
 ### Step 2: Setup Auth
+
 ```typescript
 // After user login
 localStorage.setItem('auth', JSON.stringify({
@@ -165,6 +181,7 @@ localStorage.setItem('auth', JSON.stringify({
 ```
 
 ### Step 3: Add Navigation
+
 ```typescript
 // Add menu items
 {
@@ -194,6 +211,7 @@ localStorage.setItem('auth', JSON.stringify({
 ## 🧪 Testing
 
 ### Test Different Roles
+
 ```javascript
 // Admin
 localStorage.setItem('auth', JSON.stringify({
@@ -214,6 +232,7 @@ localStorage.setItem('auth', JSON.stringify({
 ```
 
 ### Test API with cURL
+
 ```bash
 # List workers
 curl http://localhost:3001/api/workers?role=admin
@@ -249,29 +268,34 @@ curl -X POST http://localhost:3001/api/workers/wrk-001/location \
 ## 💡 Key Features
 
 ✅ **Real-Time Location Tracking**
+
 - Update worker GPS instantly
 - Timestamp tracking
 - Live map markers
 
 ✅ **Photo Management**
+
 - Upload JPEG, PNG, WEBP
 - 5MB max size
 - Display in UI
 - Persistent storage
 
 ✅ **Role-Based Access Control**
+
 - Admin: Full control
 - Staff: Update own profile
 - Client: View only
 - Auto-auth from localStorage
 
 ✅ **Interactive Map**
+
 - Leaflet mapping
 - Marker clustering
 - Zone filtering
 - Worker details modal
 
 ✅ **Admin Panel**
+
 - Full CRUD operations
 - Status management
 - Worker search
@@ -303,16 +327,19 @@ curl -X POST http://localhost:3001/api/workers/wrk-001/location \
 ## 🐛 Troubleshooting
 
 **Workers not showing?**
+
 - Check backend running: `curl http://localhost:3001/api/health`
 - Verify role in localStorage
 - Check browser console
 
 **Photos not uploading?**
+
 - Verify user role is 'admin'
 - Check file size < 5MB
 - Supported formats: JPEG, PNG, WEBP
 
 **API errors?**
+
 - Check role and userId in localStorage
 - Verify API format: `?role=admin&userId=user-123`
 - Check CORS settings
@@ -344,6 +371,7 @@ curl -X POST http://localhost:3001/api/workers/wrk-001/location \
 ## ✨ Summary
 
 You now have a **complete, tested, production-ready** system for:
+
 - Real-time worker location mapping
 - Worker photo management
 - Role-based access control
@@ -355,4 +383,3 @@ You now have a **complete, tested, production-ready** system for:
 ---
 
 **Start here:** Read `QUICKSTART_MAP_DATA.md` →
-

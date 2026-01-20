@@ -1,16 +1,19 @@
 # Real Map Data Connections Implementation
 
 ## Overview
+
 Comprehensive worker location mapping system with real-time tracking, photo uploads, and role-based access control.
 
 ## Architecture
 
 ### Backend
+
 - **Port:** 3001
 - **Framework:** Express.js
 - **Routes:** `/api/workers/*`
 
 ### Frontend
+
 - **Service:** WorkerService (Axios)
 - **Components:** WorkersMapEnhanced, WorkerManagement
 - **RBAC:** Role-based utilities in `utils/rbac.ts`
@@ -22,13 +25,16 @@ Comprehensive worker location mapping system with real-time tracking, photo uplo
 ### Worker Routes
 
 #### GET `/api/workers`
+
 Get all workers (filtered by role)
 
 **Query Parameters:**
+
 - `role` - User role: `admin` | `staff` | `client`
 - `userId` - Current user ID
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -38,6 +44,7 @@ Get all workers (filtered by role)
 ```
 
 **Role-Based Filtering:**
+
 - **Admin:** See all worker data (location, phone, email, status, certifications)
 - **Staff:** See worker list with limited contact info
 - **Client:** See only available/busy workers (basic info)
@@ -45,9 +52,11 @@ Get all workers (filtered by role)
 ---
 
 #### GET `/api/workers/:id`
+
 Get specific worker details
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -79,9 +88,11 @@ Get specific worker details
 ---
 
 #### POST `/api/workers`
+
 Create new worker (admin only)
 
 **Request Body:**
+
 ```json
 {
   "name": "John Doe",
@@ -98,6 +109,7 @@ Create new worker (admin only)
 ---
 
 #### PUT `/api/workers/:id`
+
 Update worker details (admin or worker's own profile)
 
 **Request Body:** Any worker fields to update
@@ -105,9 +117,11 @@ Update worker details (admin or worker's own profile)
 ---
 
 #### POST `/api/workers/:id/location`
+
 Update worker real-time location (staff/admin)
 
 **Request Body:**
+
 ```json
 {
   "lat": 40.7128,
@@ -116,6 +130,7 @@ Update worker real-time location (staff/admin)
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -134,9 +149,11 @@ Update worker real-time location (staff/admin)
 ---
 
 #### POST `/api/workers/:id/availability`
+
 Update worker availability status (staff/admin)
 
 **Request Body:**
+
 ```json
 {
   "availability": "available" | "busy" | "offline"
@@ -146,14 +163,17 @@ Update worker availability status (staff/admin)
 ---
 
 #### POST `/api/workers/:id/photo`
+
 Upload worker photo (admin only)
 
 **Content-Type:** `multipart/form-data`
 
 **Form Data:**
+
 - `photo` - Image file (JPEG, PNG, WEBP, max 5MB)
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -168,14 +188,17 @@ Upload worker photo (admin only)
 ---
 
 #### DELETE `/api/workers/:id`
+
 Delete worker (admin only)
 
 ---
 
 #### GET `/api/workers/zones/list`
+
 Get all available zones
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -224,6 +247,7 @@ await WorkerService.getZones()
 
 **Auto-Auth Headers:**
 All requests automatically include:
+
 - `role` - Current user's role from localStorage
 - `userId` - Current user's ID from localStorage
 
@@ -270,9 +294,11 @@ if (canPerform('admin', 'canDeleteWorker')) {
 ## Components
 
 ### WorkersMapEnhanced
+
 Location: `src/views/workers/WorkersMapEnhanced.tsx`
 
 **Features:**
+
 - Real-time Leaflet map with worker markers
 - Zone filtering
 - Worker cards with photos
@@ -284,6 +310,7 @@ Location: `src/views/workers/WorkersMapEnhanced.tsx`
 **Props:** None (uses RBAC and WorkerService)
 
 **Permissions:**
+
 - Clients: See available workers only
 - Staff: See all workers, update own location
 - Admin: Full access + photo upload
@@ -291,9 +318,11 @@ Location: `src/views/workers/WorkersMapEnhanced.tsx`
 ---
 
 ### WorkerManagement
+
 Location: `src/views/admin/WorkerManagement.tsx`
 
 **Features:**
+
 - Admin-only worker management
 - Create, read, update, delete workers
 - Status toggle (available/busy/offline)
@@ -308,11 +337,13 @@ Location: `src/views/admin/WorkerManagement.tsx`
 ## Data Storage
 
 ### Mock Database (Development)
+
 - In-memory workers array
 - Persists during API session
 - Resets on server restart
 
 ### Production Ready (MongoDB)
+
 Replace the in-memory array with MongoDB models:
 
 ```javascript
@@ -345,17 +376,21 @@ const workerSchema = {
 ## Real-Time Updates
 
 ### Option 1: Polling (Current)
+
 - Frontend calls API every 5-10 seconds
 - Simple to implement
 - Higher latency
 
 ### Option 2: WebSocket (Recommended)
+
 Install dependency:
+
 ```bash
 npm install socket.io socket.io-client
 ```
 
 Backend:
+
 ```javascript
 const io = require('socket.io')(server)
 
@@ -368,6 +403,7 @@ io.on('connection', (socket) => {
 ```
 
 Frontend:
+
 ```typescript
 import io from 'socket.io-client'
 
@@ -378,6 +414,7 @@ socket.on('worker-updated', (data) => {
 ```
 
 ### Option 3: Server-Sent Events (SSE)
+
 Simpler than WebSocket, good for one-way updates
 
 ---
@@ -409,6 +446,7 @@ src/
 ## Authentication Integration
 
 Store user auth in localStorage:
+
 ```json
 {
   "userId": "user-123",
@@ -420,6 +458,7 @@ Store user auth in localStorage:
 ```
 
 Example in AuthContext:
+
 ```typescript
 localStorage.setItem('auth', JSON.stringify({
   userId: user.id,
@@ -464,6 +503,7 @@ curl -X POST "http://localhost:3001/api/workers/wrk-001/availability" \
 ## Environment Variables
 
 `.env` (backend):
+
 ```
 PORT=3001
 NODE_ENV=development
@@ -487,19 +527,21 @@ MAX_FILE_SIZE=5242880
 ## Troubleshooting
 
 ### Photos Not Showing
+
 - Check `uploads/workers/` directory exists
 - Verify backend serves static files: `app.use(express.static(...))`
 - Check browser console for 404 errors
 
 ### Location Not Updating
+
 - Verify `role` and `userId` params in request
 - Check worker availability (offline workers blocked from some ops)
 - Verify timestamp format in response
 
 ### Permission Denied
+
 - Check localStorage auth data
 - Verify `role` is `admin|staff|client`
 - Check API role validation logic
 
 ---
-
