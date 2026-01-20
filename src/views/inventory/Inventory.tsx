@@ -49,17 +49,14 @@ const Inventory = () => {
             try {
                 setLoading(true)
                 
-                // Determine API URL - support both localhost and environment variable
-                const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001'
-                
                 const [itemsRes, summaryRes] = await Promise.all([
-                    fetch(`${apiUrl}/api/inventory/items`, {
+                    fetch('/api/inventory/items', {
                         method: 'GET',
                         headers: {
                             'Content-Type': 'application/json',
                         },
                     }),
-                    fetch(`${apiUrl}/api/inventory/summary`, {
+                    fetch('/api/inventory/summary', {
                         method: 'GET',
                         headers: {
                             'Content-Type': 'application/json',

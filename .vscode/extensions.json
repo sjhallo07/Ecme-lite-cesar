@@ -4,6 +4,7 @@
         "eamodio.gitlens",
         "msjsdiag.vscode-react-native",
         "github.copilot",
-        "github.copilot"
+        "github.copilot",
+        "github.copilot-chat"
     ]
 }

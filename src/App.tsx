@@ -1,8 +1,8 @@
-import { BrowserRouter } from 'react-router-dom'
-import Theme from '@/components/template/Theme'
-import Layout from '@/components/layouts'
 import { AuthProvider } from '@/auth'
+import Layout from '@/components/layouts'
+import Theme from '@/components/template/Theme'
 import Views from '@/views'
+import { BrowserRouter } from 'react-router-dom'
 import appConfig from './configs/app.config'
 import './locales'
 
@@ -13,7 +13,7 @@ if (appConfig.enableMock) {
 function App() {
     return (
         <Theme>
-            <BrowserRouter>
+            <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
                 <AuthProvider>
                     <Layout>
                         <Views />

@@ -3,9 +3,9 @@
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
-    "source.fixAll": true,
-    "source.organizeImports": true,
-    "source.fixAll.eslint": true
+    "source.fixAll": "explicit",
+    "source.organizeImports": "explicit",
+    "source.fixAll.eslint": "explicit"
   },
   "[typescript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
   "[javascript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
