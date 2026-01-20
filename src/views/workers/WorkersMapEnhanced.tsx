@@ -1,15 +1,16 @@
 import Button from '@/components/ui/Button'
 import WorkerService from '@/services/WorkerService'
-import { filterWorkersByRole, useRBAC } from '@/utils/rbac'
+import { filterWorkersByRole, useRBAC, type UserRole } from '@/utils/rbac'
 import { motion } from 'framer-motion'
 import type { Map as LeafletMap, Marker } from 'leaflet'
 import { useEffect, useRef, useState } from 'react'
-import {
-    PiEnvelopeDuotone,
-    PiImageSquareDuotone,
-    PiPhoneDuotone,
-    PiStarFill
-} from 'react-icons/pi'
+import
+    {
+        PiEnvelopeDuotone,
+        PiImageSquareDuotone,
+        PiPhoneDuotone,
+        PiStarFill
+    } from 'react-icons/pi'
 
 const availabilityColors: Record<string, string> = {
     available: 'bg-green-500',
@@ -146,9 +147,12 @@ const WorkersMap = () => {
     const [zones, setZones] = useState<string[]>([])
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
+    const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
+    const [locationError, setLocationError] = useState<string | null>(null)
     const mapRef = useRef<HTMLDivElement>(null)
     const [mapInstance, setMapInstance] = useState<LeafletMap | null>(null)
     const markersRef = useRef<Marker[]>([])
+    const userMarkerRef = useRef<Marker | null>(null)
     const fileInputRef = useRef<HTMLInputElement>(null)
     const [uploadingWorker, setUploadingWorker] = useState<string | null>(null)
 
@@ -159,7 +163,7 @@ const WorkersMap = () => {
                 setLoading(true)
                 const response = await WorkerService.getWorkers()
                 if (response.success) {
-                    const filtered = filterWorkersByRole(response.data, role as any)
+                    const filtered = filterWorkersByRole(response.data, role as UserRole)
                     setWorkers(response.data)
                     setFilteredWorkers(filtered)
 
@@ -205,6 +209,24 @@ const WorkersMap = () => {
                 }
             ).addTo(map)
 
+            // Try to center on user's real location
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (pos) => {
+                        const { latitude, longitude } = pos.coords
+                        setUserLocation({ lat: latitude, lng: longitude })
+                        map.setView([latitude, longitude], 13)
+                    },
+                    (err) => {
+                        console.warn('Geolocation denied or unavailable', err)
+                        setLocationError('Unable to access your location. Using default view.')
+                    },
+                    { enableHighAccuracy: true, timeout: 7000 }
+                )
+            } else {
+                setLocationError('Geolocation not supported in this browser.')
+            }
+
             setMapInstance(map)
         }
 
@@ -226,6 +248,12 @@ const WorkersMap = () => {
 
             markersRef.current.forEach((marker) => marker.remove())
             markersRef.current = []
+
+            // Clear existing user marker
+            if (userMarkerRef.current) {
+                userMarkerRef.current.remove()
+                userMarkerRef.current = null
+            }
 
             filteredWorkers.forEach((worker) => {
                 if (worker.currentLocation) {
@@ -285,10 +313,42 @@ const WorkersMap = () => {
                     markersRef.current.push(marker)
                 }
             })
+
+            // Add user location marker if available
+            if (userLocation) {
+                const userIcon = L.divIcon({
+                    className: 'user-marker',
+                    html: `
+                        <div style="
+                            width: 32px;
+                            height: 32px;
+                            background: #2563eb;
+                            border-radius: 50%;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            color: white;
+                            font-weight: bold;
+                            font-size: 12px;
+                            border: 3px solid white;
+                            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+                        ">You</div>
+                    `,
+                    iconSize: [32, 32],
+                    iconAnchor: [16, 16],
+                })
+
+                const marker = L.marker([userLocation.lat, userLocation.lng], {
+                    icon: userIcon,
+                }).addTo(mapInstance)
+
+                marker.bindPopup('<strong>Your location</strong>')
+                userMarkerRef.current = marker
+            }
         }
 
         updateMarkers()
-    }, [mapInstance, filteredWorkers])
+    }, [mapInstance, filteredWorkers, userLocation])
 
     // Handle photo upload
     const handlePhotoUpload = async (
@@ -354,6 +414,11 @@ const WorkersMap = () => {
                 <p className="text-gray-500 dark:text-gray-400">
                     Browse available service workers by zone ({filteredWorkers.length} found)
                 </p>
+                {locationError && (
+                    <p className="mt-2 text-sm text-amber-600 dark:text-amber-400">
+                        {locationError}
+                    </p>
+                )}
             </div>
 
             {/* Zone Filter */}
