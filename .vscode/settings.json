@@ -11,5 +11,44 @@
   "[javascript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
   "eslint.format.enable": true,
   "prettier.useEditorConfig": true,
-  "github.copilot.inlineSuggest.enable": true
+  "github.copilot.inlineSuggest.enable": true,
+  "chat.mcp.serverSampling": {
+    "Ecme-lite-cesar/.vscode/mcp.json: io.github.github/github-mcp-server": {
+      "allowedModels": [
+        "copilot/gpt-5-mini",
+        "copilot/auto",
+        "copilot/gemini-2.5-pro",
+        "copilot/gemini-3-flash-preview",
+        "copilot/gemini-3-pro-preview",
+        "copilot/gpt-4.1",
+        "copilot/gpt-4o",
+        "copilot/gpt-5",
+        "copilot/gpt-5-codex",
+        "copilot/gpt-5.1",
+        "copilot/gpt-5.1-codex",
+        "copilot/gpt-5.1-codex-max",
+        "copilot/gpt-5.1-codex-mini",
+        "copilot/gpt-5.2",
+        "copilot/gpt-5.2-codex",
+        "copilot/grok-code-fast-1",
+        "copilot/oswe-vscode-prime"
+      ]
+    }
+  },
+  "github.copilot.chat.agent.autoFix": true,
+  "github.copilot.chat.alternateGeminiModelFPrompt.enabled": true,
+  "github.copilot.chat.customAgents.showOrganizationAndEnterpriseAgents": true,
+  "github.copilot.chat.githubMcpServer.enabled": true,
+  "github.copilot.chat.generateTests.codeLens": true,
+  "github.copilot.chat.languageContext.fix.typescript.enabled": true,
+  "github.copilot.chat.languageContext.inline.typescript.enabled": true,
+  "github.copilot.chat.languageContext.typescript.includeDocumentation": true,
+  "github.copilot.chat.nesFetcher": "node-fetch",
+  "github.copilot.chat.newWorkspace.useContext7": true,
+  "github.copilot.chat.notebook.followCellExecution.enabled": true,
+  "github.copilot.chat.notebook.enhancedNextEditSuggestions.enabled": true,
+  "github.copilot.chat.scopeSelection": true,
+  "github.copilot.chat.githubMcpServer.lockdown": true,
+  "github.copilot.nextEditSuggestions.extendedRange": true,
+  "github.copilot.chat.tools.memory.enabled": true
 }
