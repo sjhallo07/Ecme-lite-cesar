@@ -1,8 +1,8 @@
+import appConfig from '@/configs/app.config'
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import en from './lang/en.json'
 import es from './lang/es.json'
-import appConfig from '@/configs/app.config'
 
 const resources = {
     en: {
@@ -15,7 +15,8 @@ const resources = {
 
 i18n.use(initReactI18next).init({
     resources,
-    fallbackLng: appConfig.locale,
+    // Spanish is the primary UI language; English is available as a secondary fallback.
+    fallbackLng: ['es', 'en'],
     lng: appConfig.locale,
     interpolation: {
         escapeValue: false,

@@ -21,6 +21,7 @@ Complete workflows for Admin, Staff, and Client roles in the Ecme-lite Service M
 **Access:** `http://localhost:5175/admin`
 
 **Landing View:**
+
 - Revenue metrics and KPIs
 - Active workers count with availability
 - Pending quotes summary
@@ -28,6 +29,7 @@ Complete workflows for Admin, Staff, and Client roles in the Ecme-lite Service M
 - Quick action cards
 
 **Available Tabs:**
+
 - Overview (stats and recent activity)
 - Workers (management & map)
 - Quotes (review & respond)
@@ -55,6 +57,7 @@ Complete workflows for Admin, Staff, and Client roles in the Ecme-lite Service M
 #### Admin Location Map
 
 **Features:**
+
 - Live GPS tracking of admin location
 - All workers plotted by availability:
   - 🟢 Green: Available
@@ -65,6 +68,7 @@ Complete workflows for Admin, Staff, and Client roles in the Ecme-lite Service M
 - "Locate me" button for re-centering
 
 **Workflow:**
+
 ```
 1. Scroll to map widget
 2. Allow location access when prompted
@@ -288,6 +292,7 @@ Complete workflows for Admin, Staff, and Client roles in the Ecme-lite Service M
 **Access:** `http://localhost:5175/staff/workers`
 
 **Landing View:**
+
 - Assigned jobs list
 - Today's schedule
 - Worker map (if enabled)
@@ -298,6 +303,7 @@ Complete workflows for Admin, Staff, and Client roles in the Ecme-lite Service M
 ### 2. View Workers Map
 
 **Workflow:**
+
 ```
 1. Navigate to Workers page
 2. See all workers in your zone
@@ -390,6 +396,7 @@ Complete workflows for Admin, Staff, and Client roles in the Ecme-lite Service M
 **Access:** `http://localhost:5175/find-workers`
 
 **Landing View:**
+
 - Interactive map with worker locations
 - Zone filter buttons
 - Worker cards with details
@@ -617,6 +624,7 @@ CLIENT:
 ### For All Roles
 
 **Geolocation Features:**
+
 - Real-time GPS tracking
 - Auto-center on load
 - Manual re-center button
@@ -624,12 +632,14 @@ CLIENT:
 - Fallback to default location if denied
 
 **Map Markers:**
+
 - Color-coded by availability
 - Initials or photo display
 - Click for popup info
 - Cluster view when zoomed out
 
 **Privacy Controls:**
+
 - Location permission required
 - Can deny and use default view
 - Staff can disable location sharing
@@ -642,6 +652,7 @@ CLIENT:
 ### Responsive Features
 
 **All roles optimized for mobile:**
+
 - Touch-friendly buttons
 - Swipeable cards
 - Mobile-optimized maps
@@ -649,6 +660,7 @@ CLIENT:
 - Offline capability (future)
 
 **Staff Mobile Workflow:**
+
 ```
 1. Check schedule on phone
 2. Navigate to job via map
@@ -778,7 +790,7 @@ Dashboard → Active Jobs → View Progress
 
 **Staff:** Contact admin or use in-app support
 
-**Client:** Email support@ecme-lite.com or call hotline
+**Client:** Email <support@ecme-lite.com> or call hotline
 
 ---
 

@@ -11,7 +11,8 @@ const appConfig: AppConfig = {
     apiPrefix: '/api',
     authenticatedEntryPath: '/home',
     unAuthenticatedEntryPath: '/sign-in',
-    locale: 'en',
+    // Primary UI language (Spanish). English remains available as secondary/fallback.
+    locale: 'es',
     accessTokenPersistStrategy: 'cookies',
     enableMock: true,
 }
