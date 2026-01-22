@@ -3,169 +3,42 @@ import fs from 'fs';
 import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import {
+    createWorkerDb,
+    deleteWorkerDb,
+    getWorkerDb,
+    listWorkersDb,
+    setWorkerPhotoDb,
+    updateWorkerAvailabilityDb,
+    updateWorkerDb,
+    updateWorkerLocationDb,
+} from '../utils/db.js';
 
 const router = express.Router();
-
-// Setup multer for photo uploads
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const uploadsDir = path.join(__dirname, '../../uploads/workers');
 
-// Create uploads directory if it doesn't exist
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
-}
-
+// Multer setup for worker photos
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, uploadsDir);
+    cb(null, path.join(__dirname, '../../uploads/workers'));
   },
   filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, 'worker-' + uniqueSuffix + path.extname(file.originalname));
+    const ext = path.extname(file.originalname);
+    cb(null, `worker_${Date.now()}${ext}`);
   },
 });
-
-const upload = multer({
-  storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
-  fileFilter: (req, file, cb) => {
-    const allowedTypes = /jpeg|jpg|png|webp/;
-    const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-    const mimetype = allowedTypes.test(file.mimetype);
-    if (mimetype && extname) {
-      return cb(null, true);
-    } else {
-      cb(new Error('Invalid file type. Only JPEG, PNG, WEBP allowed.'));
-    }
-  },
-});
-
-// Mock database - In production, this would be MongoDB
-let workersDb = [
-  {
-    id: 'wrk-001',
-    name: 'Carlos Rodriguez',
-    photo: null,
-    specialties: ['electrical-fencing', 'surveillance-cameras'],
-    rating: 4.8,
-    reviewCount: 127,
-    availability: 'available',
-    currentLocation: { lat: 40.7128, lng: -74.006, timestamp: Date.now() },
-    zone: 'North Zone',
-    phone: '+1-555-0101',
-    email: 'carlos.r@repairpro.com',
-    role: 'staff',
-    status: 'active',
-    skills: ['Electrical', 'Surveillance', 'Installation'],
-    experience: 8,
-    certifications: ['Electrical License', 'Security Cert'],
-  },
-  {
-    id: 'wrk-002',
-    name: 'Maria Santos',
-    photo: null,
-    specialties: ['painting', 'preventive-maintenance'],
-    rating: 4.9,
-    reviewCount: 203,
-    availability: 'busy',
-    currentLocation: { lat: 40.7282, lng: -73.7949, timestamp: Date.now() },
-    zone: 'East Zone',
-    phone: '+1-555-0102',
-    email: 'maria.s@repairpro.com',
-    role: 'staff',
-    status: 'active',
-    skills: ['Painting', 'Maintenance', 'Quality Control'],
-    experience: 12,
-    certifications: ['Paint Specialist', 'Safety Training'],
-  },
-  {
-    id: 'wrk-003',
-    name: 'John Mitchell',
-    photo: null,
-    specialties: ['air-conditioning', 'home-emergency'],
-    rating: 4.7,
-    reviewCount: 89,
-    availability: 'available',
-    currentLocation: { lat: 40.6892, lng: -74.0445, timestamp: Date.now() },
-    zone: 'South Zone',
-    phone: '+1-555-0103',
-    email: 'john.m@repairpro.com',
-    role: 'staff',
-    status: 'active',
-    skills: ['AC/HVAC', 'Emergency Response', 'Diagnostics'],
-    experience: 10,
-    certifications: ['HVAC Certified', 'EPA Certified'],
-  },
-  {
-    id: 'wrk-004',
-    name: 'Ana Martinez',
-    photo: null,
-    specialties: ['industrial', 'preventive-maintenance'],
-    rating: 4.6,
-    reviewCount: 156,
-    availability: 'offline',
-    zone: 'West Zone',
-    phone: '+1-555-0104',
-    email: 'ana.m@repairpro.com',
-    role: 'staff',
-    status: 'inactive',
-    skills: ['Industrial Systems', 'Maintenance', 'Training'],
-    experience: 15,
-    certifications: ['Industrial Cert', 'Advanced Training'],
-  },
-];
+const upload = multer({ storage });
 
 /**
  * GET /api/workers
- * Get all workers (visible based on role)
+ * List workers
  */
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   try {
-    const userRole = req.query.role || 'client'; // client, staff, admin
-
-    // Filter based on role
-    let workers = workersDb;
-
-    if (userRole === 'client') {
-      // Clients only see available and busy workers with basic info
-      workers = workers.filter(w => w.availability !== 'offline')
-        .map(w => ({
-          id: w.id,
-          name: w.name,
-          photo: w.photo,
-          specialties: w.specialties,
-          rating: w.rating,
-          reviewCount: w.reviewCount,
-          availability: w.availability,
-          zone: w.zone,
-        }));
-    } else if (userRole === 'staff') {
-      // Staff can see all workers including themselves
-      workers = workers.map(w => ({
-        id: w.id,
-        name: w.name,
-        photo: w.photo,
-        specialties: w.specialties,
-        availability: w.availability,
-        currentLocation: w.currentLocation,
-        zone: w.zone,
-        phone: w.phone,
-      }));
-    } else if (userRole === 'admin') {
-      // Admin sees everything
-      workers = workersDb;
-    }
-
-    res.json({
-      success: true,
-      data: workers,
-      count: workers.length,
-    });
+    const workers = await listWorkersDb();
+    res.json({ success: true, data: workers, count: workers.length });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message,
-    });
+    res.status(500).json({ success: false, error: error.message });
   }
 });
 
@@ -173,10 +46,10 @@ router.get('/', (req, res) => {
  * GET /api/workers/:id
  * Get specific worker details
  */
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const userRole = req.query.role || 'client';
-    const worker = workersDb.find(w => w.id === req.params.id);
+    const worker = await getWorkerDb(req.params.id);
 
     if (!worker) {
       return res.status(404).json({
@@ -209,7 +82,7 @@ router.get('/:id', (req, res) => {
  * POST /api/workers
  * Create new worker (admin only)
  */
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   try {
     const userRole = req.query.role || 'client';
 
@@ -225,8 +98,14 @@ router.post('/', (req, res) => {
       skills, experience, certifications,
     } = req.body;
 
-    const newWorker = {
-      id: 'wrk-' + String(workersDb.length + 1).padStart(3, '0'),
+    if (!name || !phone || !email || !zone) {
+      return res.status(400).json({
+        success: false,
+        error: 'name, phone, email, and zone are required',
+      });
+    }
+
+    const newWorker = await createWorkerDb({
       name,
       photo: null,
       specialties: specialties || [],
@@ -242,9 +121,7 @@ router.post('/', (req, res) => {
       skills: skills || [],
       experience: experience || 0,
       certifications: certifications || [],
-    };
-
-    workersDb.push(newWorker);
+    });
 
     res.status(201).json({
       success: true,
@@ -263,13 +140,13 @@ router.post('/', (req, res) => {
  * PUT /api/workers/:id
  * Update worker (admin or staff for own profile)
  */
-router.put('/:id', (req, res) => {
+router.put('/:id', async (req, res) => {
   try {
     const userRole = req.query.role || 'client';
     const userId = req.query.userId; // Current logged-in user ID
 
-    const workerIndex = workersDb.findIndex(w => w.id === req.params.id);
-    if (workerIndex === -1) {
+    const worker = await getWorkerDb(req.params.id);
+    if (!worker) {
       return res.status(404).json({
         success: false,
         error: 'Worker not found',
@@ -284,16 +161,11 @@ router.put('/:id', (req, res) => {
       });
     }
 
-    const updates = req.body;
-    workersDb[workerIndex] = {
-      ...workersDb[workerIndex],
-      ...updates,
-      id: workersDb[workerIndex].id, // Keep original ID
-    };
+    const updated = await updateWorkerDb(req.params.id, req.body);
 
     res.json({
       success: true,
-      data: workersDb[workerIndex],
+      data: updated,
       message: 'Worker updated successfully',
     });
   } catch (error) {
@@ -308,7 +180,7 @@ router.put('/:id', (req, res) => {
  * POST /api/workers/:id/location
  * Update worker real-time location (staff only or admin)
  */
-router.post('/:id/location', (req, res) => {
+router.post('/:id/location', async (req, res) => {
   try {
     const userRole = req.query.role || 'client';
     const userId = req.query.userId;
@@ -320,8 +192,8 @@ router.post('/:id/location', (req, res) => {
       });
     }
 
-    const workerIndex = workersDb.findIndex(w => w.id === req.params.id);
-    if (workerIndex === -1) {
+    const worker = await getWorkerDb(req.params.id);
+    if (!worker) {
       return res.status(404).json({
         success: false,
         error: 'Worker not found',
@@ -337,15 +209,11 @@ router.post('/:id/location', (req, res) => {
       });
     }
 
-    workersDb[workerIndex].currentLocation = {
-      lat,
-      lng,
-      timestamp: Date.now(),
-    };
+    const updated = await updateWorkerLocationDb(req.params.id, lat, lng);
 
     res.json({
       success: true,
-      data: workersDb[workerIndex],
+      data: updated,
       message: 'Location updated successfully',
     });
   } catch (error) {
@@ -360,7 +228,7 @@ router.post('/:id/location', (req, res) => {
  * POST /api/workers/:id/availability
  * Update worker availability (staff for self, admin for all)
  */
-router.post('/:id/availability', (req, res) => {
+router.post('/:id/availability', async (req, res) => {
   try {
     const userRole = req.query.role || 'client';
     const userId = req.query.userId;
@@ -372,8 +240,8 @@ router.post('/:id/availability', (req, res) => {
       });
     }
 
-    const workerIndex = workersDb.findIndex(w => w.id === req.params.id);
-    if (workerIndex === -1) {
+    const worker = await getWorkerDb(req.params.id);
+    if (!worker) {
       return res.status(404).json({
         success: false,
         error: 'Worker not found',
@@ -390,11 +258,11 @@ router.post('/:id/availability', (req, res) => {
       });
     }
 
-    workersDb[workerIndex].availability = availability;
+    const updated = await updateWorkerAvailabilityDb(req.params.id, availability);
 
     res.json({
       success: true,
-      data: workersDb[workerIndex],
+      data: updated,
       message: 'Availability updated successfully',
     });
   } catch (error) {
@@ -409,7 +277,7 @@ router.post('/:id/availability', (req, res) => {
  * POST /api/workers/:id/photo
  * Upload worker photo (admin only)
  */
-router.post('/:id/photo', upload.single('photo'), (req, res) => {
+router.post('/:id/photo', upload.single('photo'), async (req, res) => {
   try {
     const userRole = req.query.role || 'client';
 
@@ -431,8 +299,8 @@ router.post('/:id/photo', upload.single('photo'), (req, res) => {
       });
     }
 
-    const workerIndex = workersDb.findIndex(w => w.id === req.params.id);
-    if (workerIndex === -1) {
+    const worker = await getWorkerDb(req.params.id);
+    if (!worker) {
       fs.unlink(req.file.path, () => {});
       return res.status(404).json({
         success: false,
@@ -441,19 +309,18 @@ router.post('/:id/photo', upload.single('photo'), (req, res) => {
     }
 
     // Delete old photo if exists
-    if (workersDb[workerIndex].photo) {
-      const oldPhotoPath = path.join(__dirname, '../../', workersDb[workerIndex].photo);
+    if (worker.photo) {
+      const oldPhotoPath = path.join(__dirname, '../../', worker.photo.replace(/^\//, ''));
       fs.unlink(oldPhotoPath, () => {});
     }
 
-    // Save new photo path
     const photoPath = `/uploads/workers/${req.file.filename}`;
-    workersDb[workerIndex].photo = photoPath;
+    await setWorkerPhotoDb(req.params.id, photoPath);
 
     res.json({
       success: true,
       data: {
-        id: workersDb[workerIndex].id,
+        id: req.params.id,
         photo: photoPath,
       },
       message: 'Photo uploaded successfully',
@@ -473,7 +340,7 @@ router.post('/:id/photo', upload.single('photo'), (req, res) => {
  * DELETE /api/workers/:id
  * Delete worker (admin only)
  */
-router.delete('/:id', (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     const userRole = req.query.role || 'client';
 
@@ -484,19 +351,18 @@ router.delete('/:id', (req, res) => {
       });
     }
 
-    const workerIndex = workersDb.findIndex(w => w.id === req.params.id);
-    if (workerIndex === -1) {
+    const worker = await findWorker(req.params.id);
+    if (!worker) {
       return res.status(404).json({
         success: false,
         error: 'Worker not found',
       });
     }
 
-    const deletedWorker = workersDb.splice(workerIndex, 1)[0];
+    await deleteWorkerDb(req.params.id);
 
-    // Delete photo if exists
-    if (deletedWorker.photo) {
-      const photoPath = path.join(__dirname, '../../', deletedWorker.photo);
+    if (worker.photo) {
+      const photoPath = path.join(__dirname, '../../', worker.photo.replace(/^\//, ''));
       fs.unlink(photoPath, () => {});
     }
 
@@ -516,9 +382,10 @@ router.delete('/:id', (req, res) => {
  * GET /api/workers/zones/list
  * Get all zones (for filtering)
  */
-router.get('/zones/list', (req, res) => {
+router.get('/zones/list', async (req, res) => {
   try {
-    const zones = [...new Set(workersDb.map(w => w.zone))];
+    const workers = await listWorkersDb();
+    const zones = [...new Set(workers.map(w => w.zone))];
     res.json({
       success: true,
       data: zones,
