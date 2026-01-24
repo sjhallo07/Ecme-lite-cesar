@@ -117,7 +117,7 @@ graph TB
     subgraph "External Services"
         Firebase[Firebase Auth]
         LeafletMaps[Leaflet Maps]
-        OpenAI[OpenAI API<br/>via Agent Proxy]
+        OpenAI[OpenAI API<br/>via Agent Proxy<br/>Secured with host allowlist]
     end
     
     subgraph "Future Integrations"
@@ -155,6 +155,19 @@ graph TB
     style Firebase fill:#fff9c4
     style LeafletMaps fill:#b2dfdb
 ```
+
+### External Services Details
+
+#### OpenAI Integration (via Agent Proxy)
+The application uses a secure Agent Proxy endpoint to communicate with OpenAI API:
+- **Endpoint**: `/api/agent` (POST)
+- **Security**: Host allowlist enforced (`api.openai.com`, `*.openai.azure.com`)
+- **Features**: Supports both JSON responses and Server-Sent Events (SSE) streaming
+- **Guardrails**: Request/response size limits, header sanitization, timeout protection
+- **Authentication**: Authorization headers are redacted from logs for security
+- **Use Case**: Powers the AI chatbot component for customer support
+
+For more details on the Agent Proxy security features, see the backend README.
 
 ## Detailed Component Architecture
 

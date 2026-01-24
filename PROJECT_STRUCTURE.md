@@ -288,7 +288,7 @@ src/
 │   ├── contact/
 │   │   ├── Contact.tsx
 │   │   └── index.ts
-│   ├── demo/
+│   ├── demo/            # Demo views for menu components
 │   ├── enterprise/
 │   │   ├── Enterprise.tsx
 │   │   └── index.ts
