@@ -140,7 +140,9 @@ npm run docker:logs
 npm run docker:stop
 ```
 
-See [DOCKER_GUIDE.md](DOCKER_GUIDE.md) for comprehensive Docker setup and usage instructions.
+**Quick Start**: See [DOCKER_QUICKSTART.md](DOCKER_QUICKSTART.md) for immediate Docker usage in Codespaces
+
+**Complete Guide**: See [DOCKER_GUIDE.md](DOCKER_GUIDE.md) for comprehensive Docker setup and usage instructions
 
 ## Project Structure
 
