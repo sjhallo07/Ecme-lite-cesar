@@ -1,7 +1,8 @@
 import { workersData as mockWorkers } from '@/data/services.data'
 import axios from 'axios'
 
-const API_BASE_URL = '/api/workers'
+const API_PREFIX = import.meta.env.VITE_API_PREFIX || '/api'
+const API_BASE_URL = `${API_PREFIX}/workers`
 
 // Get current user role from auth context or localStorage
 const getUserRole = () => {

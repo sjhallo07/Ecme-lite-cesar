@@ -5,12 +5,13 @@ import { filterWorkersByRole, useRBAC, type UserRole } from '@/utils/rbac'
 import { motion } from 'framer-motion'
 import type { Map as LeafletMap, Marker } from 'leaflet'
 import { useEffect, useRef, useState } from 'react'
-import {
-    PiEnvelopeDuotone,
-    PiImageSquareDuotone,
-    PiPhoneDuotone,
-    PiStarFill
-} from 'react-icons/pi'
+import
+    {
+        PiEnvelopeDuotone,
+        PiImageSquareDuotone,
+        PiPhoneDuotone,
+        PiStarFill
+    } from 'react-icons/pi'
 
 const availabilityColors: Record<string, string> = {
     available: 'bg-green-500',
@@ -511,10 +512,114 @@ const WorkersMap = () => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* Map */}
                 <div className="lg:col-span-2">
-                    <div
-                        ref={mapRef}
-                        className="w-full h-[500px] rounded-xl overflow-hidden shadow-sm bg-gray-200 dark:bg-gray-700"
-                    />
+                    <div className="relative">
+                        <div
+                            ref={mapRef}
+                            className="w-full h-[500px] rounded-xl overflow-hidden shadow-sm bg-gray-200 dark:bg-gray-700"
+                        />
+                        {selectedWorker && (
+                            <div className="absolute top-4 right-4 z-10 w-full max-w-sm">
+                                <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+                                    <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-gray-700">
+                                        <div>
+                                            <h3 className="text-base font-semibold text-gray-900 dark:text-white">
+                                                {selectedWorker.name}
+                                            </h3>
+                                            <p className="text-xs text-gray-500 dark:text-gray-400">{selectedWorker.zone}</p>
+                                        </div>
+                                        <button
+                                            aria-label="Close"
+                                            className="p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700"
+                                            onClick={() => setSelectedWorker(null)}
+                                        >
+                                            ✕
+                                        </button>
+                                    </div>
+                                    <div className="px-4 py-3">
+                                        <div className="flex items-center gap-3">
+                                            <div className="relative">
+                                                {selectedWorker.photo ? (
+                                                    <img
+                                                        src={selectedWorker.photo}
+                                                        alt={selectedWorker.name}
+                                                        className="w-14 h-14 rounded-full object-cover"
+                                                    />
+                                                ) : (
+                                                    <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg">
+                                                        {selectedWorker.name.split(' ').map((n: string) => n[0]).join('')}
+                                                    </div>
+                                                )}
+                                                <span
+                                                    className={`absolute bottom-0 right-0 w-4 h-4 rounded-full border-2 border-white dark:border-gray-800 ${availabilityColors[selectedWorker.availability]}`}
+                                                />
+                                            </div>
+                                            <div className="flex-1">
+                                                {selectedWorker.rating && (
+                                                    <div className="flex items-center gap-1">
+                                                        <PiStarFill className="text-yellow-500 w-4 h-4" />
+                                                        <span className="text-sm font-medium">{selectedWorker.rating}</span>
+                                                        <span className="text-xs text-gray-400">({selectedWorker.reviewCount} reviews)</span>
+                                                    </div>
+                                                )}
+                                                <div className="text-xs mt-1 text-gray-500 dark:text-gray-400">
+                                                    {availabilityLabels[selectedWorker.availability]}
+                                                    {typeof (selectedWorker as any).lastSeen !== 'undefined' && (
+                                                        <span className="ml-2">• Last seen {new Date((selectedWorker as any).lastSeen).toLocaleString()}</span>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {selectedWorker.specialties?.length > 0 && (
+                                            <div className="mt-3 flex flex-wrap gap-1">
+                                                {selectedWorker.specialties.slice(0, 4).map((s: string) => (
+                                                    <span key={s} className="px-2 py-0.5 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 text-xs rounded">
+                                                        {s.replace('-', ' ')}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        )}
+
+                                        <div className="mt-4 grid grid-cols-2 gap-2">
+                                            {selectedWorker.availability !== 'offline' && selectedWorker.phone && (
+                                                <a href={`tel:${selectedWorker.phone}`}>
+                                                    <Button variant="solid" className="w-full">
+                                                        <PiPhoneDuotone className="w-4 h-4" />
+                                                        Call
+                                                    </Button>
+                                                </a>
+                                            )}
+                                            {selectedWorker.email && (
+                                                <a href={`mailto:${selectedWorker.email}`}>
+                                                    <Button variant="default" className="w-full">
+                                                        <PiEnvelopeDuotone className="w-4 h-4" />
+                                                        Email
+                                                    </Button>
+                                                </a>
+                                            )}
+                                        </div>
+
+                                        {isAdmin && (
+                                            <div className="mt-3">
+                                                <Button
+                                                    size="sm"
+                                                    variant="twoTone"
+                                                    className="w-full"
+                                                    onClick={() => {
+                                                        setUploadingWorker(selectedWorker.id)
+                                                        fileInputRef.current?.click()
+                                                    }}
+                                                >
+                                                    <PiImageSquareDuotone className="w-4 h-4" />
+                                                    Upload Photo
+                                                </Button>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
                     {filteredWorkers.length === 0 && (
                         <div className="mt-3 text-sm text-gray-600 dark:text-gray-300">
                             No workers found in this selection. {isFallback && 'Data shown may be limited.'}
@@ -595,178 +700,7 @@ const WorkersMap = () => {
                 }}
             />
 
-            {/* Selected Worker Modal */}
-            {selectedWorker && (
-                <motion.div
-                    className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    onClick={() => setSelectedWorker(null)}
-                >
-                    <motion.div
-                        className="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-md w-full max-h-[90vh] overflow-y-auto"
-                        initial={{ scale: 0.9, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <div className="text-center mb-6">
-                            <div className="relative mx-auto w-24 h-24 mb-4">
-                                {selectedWorker.photo ? (
-                                    <img
-                                        src={selectedWorker.photo}
-                                        alt={selectedWorker.name}
-                                        className="w-full h-full rounded-full object-cover"
-                                    />
-                                ) : (
-                                    <div className="w-full h-full rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-4xl">
-                                        {selectedWorker.name
-                                            .split(' ')
-                                            .map((n: string) => n[0])
-                                            .join('')}
-                                    </div>
-                                )}
-                                {isAdmin && (
-                                    <button
-                                        className="absolute -bottom-1 -right-1 p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600"
-                                        onClick={() => {
-                                            setUploadingWorker(
-                                                selectedWorker.id
-                                            )
-                                            fileInputRef.current?.click()
-                                        }}
-                                    >
-                                        <PiImageSquareDuotone className="w-5 h-5" />
-                                    </button>
-                                )}
-                            </div>
-                            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                                {selectedWorker.name}
-                            </h2>
-                            <p className="text-gray-500 dark:text-gray-400">
-                                {selectedWorker.zone}
-                            </p>
-                            {selectedWorker.rating && (
-                                <div className="flex items-center justify-center gap-1 mt-2">
-                                    <PiStarFill className="text-yellow-500" />
-                                    <span className="font-medium">
-                                        {selectedWorker.rating}
-                                    </span>
-                                    <span className="text-gray-400">
-                                        ({selectedWorker.reviewCount} reviews)
-                                    </span>
-                                </div>
-                            )}
-                            {typeof (selectedWorker as any).lastSeen !== 'undefined' && (
-                                <p className="mt-2 text-xs text-gray-500">Last seen: {new Date((selectedWorker as any).lastSeen).toLocaleString()}</p>
-                            )}
-                        </div>
-
-                        {/* Staff/Skills */}
-                        {selectedWorker.skills && (
-                            <div className="mb-6">
-                                <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
-                                    Skills
-                                </h3>
-                                <div className="flex flex-wrap gap-2">
-                                    {selectedWorker.skills.map(
-                                        (skill: string) => (
-                                            <span
-                                                key={skill}
-                                                className="px-3 py-1 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 text-sm rounded-full"
-                                            >
-                                                {skill}
-                                            </span>
-                                        )
-                                    )}
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Specialties */}
-                        <div className="mb-6">
-                            <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
-                                Specialties
-                            </h3>
-                            <div className="flex flex-wrap gap-2">
-                                {selectedWorker.specialties?.map(
-                                    (s: string) => (
-                                        <span
-                                            key={s}
-                                            className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 text-sm rounded-full"
-                                        >
-                                            {s.replace('-', ' ')}
-                                        </span>
-                                    )
-                                )}
-                            </div>
-                        </div>
-
-                        {/* Experience */}
-                        {selectedWorker.experience && (
-                            <div className="mb-6 grid grid-cols-2 gap-4">
-                                <div>
-                                    <p className="text-xs text-gray-500">
-                                        Experience
-                                    </p>
-                                    <p className="text-lg font-semibold text-gray-900 dark:text-white">
-                                        {selectedWorker.experience} years
-                                    </p>
-                                </div>
-                                {certificationCount > 0 && (
-                                    <div>
-                                        <p className="text-xs text-gray-500">
-                                            Certifications
-                                        </p>
-                                        <p className="text-lg font-semibold text-gray-900 dark:text-white">
-                                            {certificationCount}
-                                        </p>
-                                    </div>
-                                )}
-                            </div>
-                        )}
-
-                        {/* Action Buttons */}
-                        <div className="flex gap-3 mb-4">
-                            {selectedWorker.availability !== 'offline' &&
-                                selectedWorker.phone && (
-                                    <a
-                                        href={`tel:${selectedWorker.phone}`}
-                                        className="flex-1"
-                                    >
-                                        <Button
-                                            variant="solid"
-                                            className="w-full"
-                                        >
-                                            <PiPhoneDuotone className="w-4 h-4" />
-                                            Call
-                                        </Button>
-                                    </a>
-                                )}
-                            {selectedWorker.email && (
-                                <a
-                                    href={`mailto:${selectedWorker.email}`}
-                                    className="flex-1"
-                                >
-                                    <Button
-                                        variant="default"
-                                        className="w-full"
-                                    >
-                                        <PiEnvelopeDuotone className="w-4 h-4" />
-                                        Email
-                                    </Button>
-                                </a>
-                            )}
-                        </div>
-
-                        <button
-                            className="w-full text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
-                            onClick={() => setSelectedWorker(null)}
-                        >
-                            Close
-                        </button>
-                    </motion.div>
-                </motion.div>
-            )}
+            {/* Floating info panel is rendered over the map above */}
         </div>
     )
 }

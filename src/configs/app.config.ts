@@ -8,13 +8,13 @@ export type AppConfig = {
 }
 
 const appConfig: AppConfig = {
-    apiPrefix: '/api',
+    apiPrefix: import.meta.env.VITE_API_PREFIX || '/api',
     authenticatedEntryPath: '/home',
     unAuthenticatedEntryPath: '/sign-in',
     // Primary UI language (Spanish). English remains available as secondary/fallback.
     locale: 'es',
     accessTokenPersistStrategy: 'cookies',
-    enableMock: true,
+    enableMock: (import.meta.env.VITE_ENABLE_MOCK || 'true') === 'true',
 }
 
 export default appConfig

@@ -35,19 +35,20 @@ function Show-Help {
     Write-Host "  -FrontendOnly   Start only the frontend dev server"
     Write-Host ""
     Write-Host "Environment Variables:" -ForegroundColor Cyan
-    Write-Host "  PORT           Backend port (default: 3001)"
-    Write-Host "  VITE_API_URL   Frontend API URL (default: http://localhost:3001)"
+    Write-Host "  PORT            Backend port (default: 3001)"
+    Write-Host "  FRONTEND_PORT   Frontend port (default: 5173)"
     Write-Host ""
     Write-Host "Examples:" -ForegroundColor Cyan
     Write-Host "  .\quickstart.ps1                      # Install & start both servers"
     Write-Host "  `$env:PORT=4000; .\quickstart.ps1     # Start backend on port 4000"
+    Write-Host "  `$env:FRONTEND_PORT=5175; .\quickstart.ps1  # Start frontend on port 5175"
     Write-Host "  .\quickstart.ps1 -FrontendOnly        # Start only frontend"
     Write-Host "  .\quickstart.ps1 -BackendOnly         # Start only backend"
     Write-Host ""
-    Write-Host "Notes:" -ForegroundColor Cyan
+    Write-Host "Notes:" -ForegroundColor Cyan"
     Write-Host "  - Requires Node.js 18+ and npm"
-    Write-Host "  - Backend will run on http://localhost:3001"
-    Write-Host "  - Frontend will run on http://localhost:5174"
+    Write-Host "  - Backend default: http://localhost:3001"
+    Write-Host "  - Frontend default: http://localhost:5173"
     Write-Host "  - Press Ctrl+C to stop all services"
     Write-Host ""
 }
@@ -99,11 +100,24 @@ function Install-IfMissing {
     }
 }
 
+function Ensure-Env {
+    param([string]$Target, [string]$Example)
+    if (Test-Path $Target) {
+        Write-Host "✅ Found $(Split-Path $Target -Leaf)" -ForegroundColor Green
+    } elseif (Test-Path $Example) {
+        Copy-Item $Example $Target -Force
+        Write-Host "✅ Created $(Split-Path $Target -Leaf) from $(Split-Path $Example -Leaf)" -ForegroundColor Green
+    } else {
+        Write-Host "⚠️  Missing $Target and no example present" -ForegroundColor Yellow
+    }
+}
+
 function Start-Backend {
     param([int]$Port = 3001)
     Write-Host "🚀 Starting backend API server (PORT=$Port)..." -ForegroundColor Blue
     
     $backendDir = Join-Path $PSScriptRoot 'backend'
+    $env:PORT = $Port
     $script:BackendProc = Start-Process npm `
         -ArgumentList @('start') `
         -WorkingDirectory $backendDir `
@@ -121,11 +135,12 @@ function Start-Backend {
 }
 
 function Start-Frontend {
-    Write-Host "🌐 Starting frontend dev server (Vite)..." -ForegroundColor Blue
+    param([int]$Port = 5173)
+    Write-Host "🌐 Starting frontend dev server (Vite, port $Port)..." -ForegroundColor Blue
     $frontendDir = $PSScriptRoot
     Push-Location $frontendDir
     try {
-        & npm run dev
+        & npm run dev -- --host --port $Port
     } finally {
         Pop-Location
     }
@@ -161,6 +176,11 @@ Require-Cmd npm
 Check-NodeVersion
 Write-Host ""
 
+Write-Host "Checking environment files..." -ForegroundColor Blue
+Ensure-Env (Join-Path $PSScriptRoot '.env') (Join-Path $PSScriptRoot '.env.example')
+Ensure-Env (Join-Path $PSScriptRoot 'backend/.env') (Join-Path $PSScriptRoot 'backend/.env.example')
+Write-Host ""
+
 if (-not $NoInstall) {
     Write-Host "Installing dependencies..." -ForegroundColor Blue
     Install-IfMissing (Join-Path $PSScriptRoot 'backend') "backend"
@@ -176,15 +196,18 @@ Write-Host ""
 
 $script:BackendProc = $null
 
+$backendPort = [int]($env:PORT | ForEach-Object { if ($_ -match '^\d+$') { $_ } else { 3001 } })
+$frontendPort = [int]($env:FRONTEND_PORT | ForEach-Object { if ($_ -match '^\d+$') { $_ } else { 5173 } })
+
 if (-not $FrontendOnly) {
-    if (-not (Start-Backend)) {
+    if (-not (Start-Backend -Port $backendPort)) {
         exit 1
     }
 }
 
 if ($BackendOnly) {
     Write-Host "✅ Backend started successfully!" -ForegroundColor Green
-    Write-Host "  API URL: http://localhost:3001" -ForegroundColor Green
+    Write-Host "  API URL: http://localhost:$backendPort" -ForegroundColor Green
     Write-Host ""
     Write-Host "Press Ctrl+C to stop" -ForegroundColor Blue
     Write-Host ""
@@ -200,12 +223,12 @@ if ($BackendOnly) {
     Write-Host "✅ All services started successfully!" -ForegroundColor Green
     Write-Host ""
     Write-Host "Access your application:" -ForegroundColor Blue
-    Write-Host "  Frontend:  http://localhost:5174" -ForegroundColor Green
-    Write-Host "  Backend:   http://localhost:3001" -ForegroundColor Green
-    Write-Host "  Health:    http://localhost:3001/api/health" -ForegroundColor Green
+    Write-Host "  Frontend:  http://localhost:$frontendPort" -ForegroundColor Green
+    Write-Host "  Backend:   http://localhost:$backendPort" -ForegroundColor Green
+    Write-Host "  Health:    http://localhost:$backendPort/api/health" -ForegroundColor Green
     Write-Host ""
     Write-Host "Press Ctrl+C to stop all services" -ForegroundColor Blue
     Write-Host ""
     
-    Start-Frontend
+    Start-Frontend -Port $frontendPort
 }

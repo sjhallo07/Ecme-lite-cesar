@@ -41,6 +41,8 @@ const Inventory = () => {
     const [sortField, setSortField] = useState<'name' | 'quantity' | 'unitPrice'>('name')
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
 
+    const API_PREFIX = import.meta.env.VITE_API_PREFIX || '/api'
+
     // Fetch inventory data from backend
     useEffect(() => {
         const fetchInventory = async () => {
@@ -48,13 +50,13 @@ const Inventory = () => {
                 setLoading(true)
                 
                 const [itemsRes, summaryRes] = await Promise.all([
-                    fetch('/api/inventory/items', {
+                    fetch(`${API_PREFIX}/inventory/items`, {
                         method: 'GET',
                         headers: {
                             'Content-Type': 'application/json',
                         },
                     }),
-                    fetch('/api/inventory/summary', {
+                    fetch(`${API_PREFIX}/inventory/summary`, {
                         method: 'GET',
                         headers: {
                             'Content-Type': 'application/json',

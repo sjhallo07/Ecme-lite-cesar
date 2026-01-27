@@ -3,17 +3,48 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BACKEND_DIR="$ROOT_DIR/backend"
+FRONTEND_PORT="${FRONTEND_PORT:-5173}"
+BACKEND_PORT="${PORT:-3001}"
+NO_INSTALL=false
+BACKEND_ONLY=false
+FRONTEND_ONLY=false
+
+usage() {
+    cat <<EOF
+Usage: ./quickstart.sh [options]
+
+Options:
+  -h, --help          Show this help
+  -n, --no-install    Skip npm install steps
+  -b, --backend-only  Start only the backend
+  -f, --frontend-only Start only the frontend
+
+Environment:
+  PORT              Backend port (default: 3001)
+  FRONTEND_PORT     Frontend port (default: 5173)
+EOF
+}
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -h|--help) usage; exit 0 ;;
+        -n|--no-install) NO_INSTALL=true ;;
+        -b|--backend-only) BACKEND_ONLY=true ;;
+        -f|--frontend-only) FRONTEND_ONLY=true ;;
+        *) echo "Unknown option: $1" >&2; usage; exit 1 ;;
+    esac
+    shift
+done
 
 echo "========================================="
-echo "🗺️  Ecme-lite Local Setup with Maps"
+echo "🗺️  Ecme-lite Local Setup"
 echo "========================================="
 echo ""
 
-# Check prerequisites
+# Checks
 require_cmd() {
     if ! command -v "$1" >/dev/null 2>&1; then
         echo "❌ Missing required: $1" >&2
-        echo "   Please install $1 and try again." >&2
         exit 1
     fi
 }
@@ -35,10 +66,27 @@ echo "✅ Node.js $(node -v)"
 echo "✅ npm $(npm -v)"
 echo ""
 
-# Install dependencies
+# Env helpers
+ensure_env() {
+    local target="$1" example="$2"
+    if [ -f "$target" ]; then
+        echo "✅ Found $(basename "$target")"
+    elif [ -f "$example" ]; then
+        cp "$example" "$target"
+        echo "✅ Created $(basename "$target") from $(basename "$example")"
+    else
+        echo "⚠️  Missing $target and no example found"
+    fi
+}
+
+echo "⚙️  Checking environment files..."
+ensure_env "$ROOT_DIR/.env" "$ROOT_DIR/.env.example"
+ensure_env "$BACKEND_DIR/.env" "$BACKEND_DIR/.env.example"
+echo ""
+
+# Install deps
 install_deps() {
-    local dir="$1"
-    local name="$2"
+    local dir="$1" name="$2"
     if [ ! -d "$dir/node_modules" ]; then
         echo "📦 Installing $name dependencies..."
         npm install --prefix "$dir" --silent
@@ -48,61 +96,23 @@ install_deps() {
     fi
 }
 
-echo "📦 Installing dependencies..."
-install_deps "$ROOT_DIR" "Frontend"
-install_deps "$BACKEND_DIR" "Backend"
-echo ""
-
-# Check environment
-echo "⚙️  Checking environment..."
-if [ ! -f "$ROOT_DIR/.env" ]; then
-    echo "⚠️  No .env file found. Creating from defaults..."
-    cat > "$ROOT_DIR/.env" <<EOF
-NODE_ENV=development
-APP_PORT=5175
-API_PORT=3001
-
-MAP_PROVIDER=leaflet
-VITE_MAP_PROVIDER=leaflet
-VITE_API_URL=http://localhost:3001
-
-VITE_ENABLE_WORKERS_MAP=true
-VITE_ENABLE_INVENTORY=true
-
-VITE_DEFAULT_CURRENCY=USD
-VITE_DEFAULT_LANGUAGE=en
-EOF
-    echo "✅ .env file created with map defaults"
+if [ "$NO_INSTALL" = false ]; then
+    echo "📦 Installing dependencies..."
+    install_deps "$ROOT_DIR" "Frontend"
+    install_deps "$BACKEND_DIR" "Backend"
+    echo ""
 else
-    echo "✅ .env file exists"
+    echo "⏭️  Skipping npm install"
 fi
 
-if [ ! -f "$BACKEND_DIR/.env" ]; then
-    echo "⚠️  No backend .env found. Creating..."
-    cat > "$BACKEND_DIR/.env" <<EOF
-PORT=3001
-MONGODB_URI=mongodb://localhost:27017
-MONGODB_DB_NAME=ecme_lite
-UPLOAD_DIR=uploads
-AGENT_TIMEOUT_MS=60000
-AGENT_HOST_ALLOWLIST=localhost,127.0.0.1
-JWT_SECRET=dev_secret_key
-EOF
-    echo "✅ Backend .env created"
-else
-    echo "✅ Backend .env exists"
-fi
-echo ""
-
-# Start servers
+# Cleanup handler
 cleanup() {
     if [ -n "${BACKEND_PID:-}" ] && ps -p "$BACKEND_PID" >/dev/null 2>&1; then
         echo ""
-        echo "🛑 Stopping servers..."
+        echo "🛑 Stopping backend (PID: $BACKEND_PID)"
         kill "$BACKEND_PID" 2>/dev/null || true
     fi
 }
-
 trap cleanup EXIT
 
 echo "========================================="
@@ -110,38 +120,30 @@ echo "🚀 Starting Development Servers"
 echo "========================================="
 echo ""
 
-echo "🔧 Backend API starting on port 3001..."
-PORT=3001 npm start --prefix "$BACKEND_DIR" > /tmp/backend.log 2>&1 &
-BACKEND_PID=$!
-sleep 2
-
-if ps -p "$BACKEND_PID" >/dev/null 2>&1; then
-    echo "✅ Backend running (PID: $BACKEND_PID)"
-else
-    echo "❌ Backend failed to start. Check /tmp/backend.log"
-    exit 1
+if [ "$FRONTEND_ONLY" = false ]; then
+    echo "🔧 Backend API starting on port $BACKEND_PORT..."
+    PORT="$BACKEND_PORT" npm start --prefix "$BACKEND_DIR" > "$ROOT_DIR/.backend.log" 2>&1 &
+    BACKEND_PID=$!
+    sleep 2
+    if ps -p "$BACKEND_PID" >/dev/null 2>&1; then
+        echo "✅ Backend running (PID: $BACKEND_PID)"
+    else
+        echo "❌ Backend failed to start. Check $ROOT_DIR/.backend.log"
+        exit 1
+    fi
 fi
 
-echo "🌐 Frontend starting on port 5175..."
-echo ""
-echo "========================================="
-echo "📍 Map Dashboards Ready:"
-echo "========================================="
-echo "   Admin with Geolocation:  http://localhost:5175/admin"
-echo "   Staff Workers:           http://localhost:5175/staff/workers"
-echo "   Client Worker Map:       http://localhost:5175/find-workers"
-echo "   Backend API:             http://localhost:3001/api/workers"
-echo ""
-echo "🔑 Features:"
-echo "   ✓ Leaflet maps with OpenStreetMap"
-echo "   ✓ Real-time GPS geolocation"
-echo "   ✓ Admin location tracking"
-echo "   ✓ Worker availability markers"
-echo "   ✓ Zone filtering"
+if [ "$BACKEND_ONLY" = true ]; then
+    echo ""
+    echo "Backend ready at http://localhost:$BACKEND_PORT/api/health"
+    echo "Press Ctrl+C to stop."
+    while true; do sleep 3600; done
+fi
+
+echo "🌐 Frontend starting on port $FRONTEND_PORT..."
 echo ""
 echo "💡 Tip: Allow location access when prompted"
-echo "🛑 Press Ctrl+C to stop all servers"
-echo "========================================="
+echo "🛑 Press Ctrl+C to stop all services"
 echo ""
 
-npm run dev -- --host
+npm run dev -- --host --port "$FRONTEND_PORT"
