@@ -1,10 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # ============================================
 # Docker Build Script for Ecme-lite-cesar
 # ============================================
 
-set -e  # Exit on error
+set -euo pipefail  # Exit on error
 
 # Colors for output
 RED='\033[0;31m'
