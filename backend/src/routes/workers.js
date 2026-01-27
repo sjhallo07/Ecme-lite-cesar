@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import {
     createWorkerDb,
     deleteWorkerDb,
+    getDefaultWorkers,
     getWorkerDb,
     listWorkersDb,
     setWorkerPhotoDb,
@@ -36,9 +37,11 @@ const upload = multer({ storage });
 router.get('/', async (req, res) => {
   try {
     const workers = await listWorkersDb();
-    res.json({ success: true, data: workers, count: workers.length });
+    return res.json({ success: true, data: workers, count: workers.length });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    // Graceful fallback when DB is unavailable
+    const workers = getDefaultWorkers();
+    return res.status(200).json({ success: true, data: workers, count: workers.length, fallback: true });
   }
 });
 
@@ -351,7 +354,7 @@ router.delete('/:id', async (req, res) => {
       });
     }
 
-    const worker = await findWorker(req.params.id);
+    const worker = await getWorkerDb(req.params.id);
     if (!worker) {
       return res.status(404).json({
         success: false,

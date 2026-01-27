@@ -1,3 +1,4 @@
+import { workersData as mockWorkers } from '@/data/services.data'
 import axios from 'axios'
 
 const API_BASE_URL = '/api/workers'
@@ -50,7 +51,8 @@ export const getWorkers = async () => {
         return response.data
     } catch (error) {
         console.error('Error fetching workers:', error)
-        throw error
+        // Frontend fallback: use mock workers so UI remains functional when backend is down
+        return { success: true, data: mockWorkers, count: mockWorkers.length, fallback: true }
     }
 }
 

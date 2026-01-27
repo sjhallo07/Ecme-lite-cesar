@@ -10,7 +10,7 @@ let client;
 let db;
 
 // ----- Worker helpers (Mongo-first, seed with defaults if empty) -----
-const DEFAULT_WORKERS = [
+export const DEFAULT_WORKERS = [
   {
     id: 'wrk-001',
     name: 'Carlos Rodriguez',
@@ -191,4 +191,9 @@ export async function updateWorkerAvailabilityDb(id, availability) {
 
 export async function setWorkerPhotoDb(id, photoPath) {
   return updateWorkerDb(id, { photo: photoPath });
+}
+
+// Fallback provider when MongoDB is unavailable
+export function getDefaultWorkers() {
+  return DEFAULT_WORKERS;
 }

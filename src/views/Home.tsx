@@ -1,7 +1,9 @@
+import HealthStatus from '@/components/shared/HealthStatus'
 import Button from '@/components/ui/Button'
 import { servicesData } from '@/data/services.data'
 import { useCurrencyStore } from '@/store/currencyStore'
 import { motion } from 'framer-motion'
+import { useEffect, useState } from 'react'
 import
     {
         PiArrowRightDuotone,
@@ -27,6 +29,57 @@ const serviceCategories = [
     { icon: PiWrenchDuotone, name: 'Repairs', color: 'from-emerald-500 to-teal-500' },
 ]
 
+const conceptSlides = [
+    {
+        title: 'Electric Fencing',
+        subtitle: 'Security & perimeter protection',
+        icon: PiShieldCheckDuotone,
+        colors: 'from-amber-500 to-orange-500',
+        imageUrl: 'https://images.pexels.com/photos/19893406/pexels-photo-19893406.jpeg?cs=srgb&dl=pexels-795059216-19893406.jpg&fm=jpg',
+        alt: 'Sunlit brick wall texture – Photo from Pexels',
+    },
+    {
+        title: 'Surveillance',
+        subtitle: 'CCTV and IP camera systems',
+        icon: PiVideoCameraDuotone,
+        colors: 'from-sky-500 to-blue-600',
+        imageUrl: 'https://images.pexels.com/photos/13800327/pexels-photo-13800327.jpeg?cs=srgb&dl=pexels-mahdibafande-13800327.jpg&fm=jpg',
+        alt: 'Abstract long exposure light streaks – Photo from Pexels',
+    },
+    {
+        title: 'Painting',
+        subtitle: 'Interior & exterior professional finishes',
+        icon: PiPaintBrushDuotone,
+        colors: 'from-pink-500 to-rose-600',
+        imageUrl: 'https://images.pexels.com/photos/1269968/pexels-photo-1269968.jpeg?cs=srgb&dl=pexels-steve-1269968.jpg&fm=jpg',
+        alt: 'Multicolored abstract acrylic painting – Photo from Pexels',
+    },
+    {
+        title: 'AC Services',
+        subtitle: 'Installation, repair & maintenance',
+        icon: PiSnowflakeDuotone,
+        colors: 'from-cyan-500 to-sky-600',
+        imageUrl: 'https://images.pexels.com/photos/7130473/pexels-photo-7130473.jpeg?cs=srgb&dl=pexels-codioful-7130473.jpg&fm=jpg',
+        alt: 'Multicolor gradient background – Photo from Pexels',
+    },
+    {
+        title: 'Maintenance',
+        subtitle: 'Preventive & scheduled service',
+        icon: PiGearDuotone,
+        colors: 'from-blue-600 to-indigo-700',
+        imageUrl: 'https://images.pexels.com/photos/7794433/pexels-photo-7794433.jpeg?cs=srgb&dl=pexels-gabby-k-7794433.jpg&fm=jpg',
+        alt: 'Minimalistic white textured wall – Photo from Pexels',
+    },
+    {
+        title: 'Repairs',
+        subtitle: 'Fast, reliable fix for your home',
+        icon: PiWrenchDuotone,
+        colors: 'from-emerald-500 to-teal-600',
+        imageUrl: 'https://images.pexels.com/photos/7794411/pexels-photo-7794411.jpeg?cs=srgb&dl=pexels-gabby-k-7794411.jpg&fm=jpg',
+        alt: 'Gray textured backdrop with linear patterns – Photo from Pexels',
+    },
+]
+
 const stats = [
     { value: '10K+', label: 'Happy Customers' },
     { value: '50+', label: 'Expert Technicians' },
@@ -38,6 +91,15 @@ const Home = () =>
 {
     const formatPrice = useCurrencyStore((state) => state.formatPrice)
     const featuredServices = servicesData.slice(0, 3)
+    const [active, setActive] = useState(0)
+    const ActiveIcon = conceptSlides[active].icon
+
+    useEffect(() => {
+        const id = setInterval(() => {
+            setActive((prev) => (prev + 1) % conceptSlides.length)
+        }, 5000)
+        return () => clearInterval(id)
+    }, [])
 
     return (
         <div className="min-h-screen">
@@ -91,6 +153,102 @@ const Home = () =>
                     </motion.div>
                 </div>
             </motion.div>
+
+            {/* API Connectivity Status */}
+            <div className="mb-8">
+                <div className="max-w-5xl mx-auto px-4">
+                    <div className="flex items-center justify-between gap-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-4">
+                        <div>
+                            <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Backend Connectivity</h3>
+                            <p className="text-xs text-gray-600 dark:text-gray-400">Testing GET /api/health via frontend</p>
+                        </div>
+                        <HealthStatus intervalMs={0} />
+                    </div>
+                </div>
+            </div>
+
+            {/* Concepts Carousel */}
+            <div className="mb-16">
+                <div className="text-center mb-6">
+                    <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+                        Home Repairs, AC & Electrical — At a Glance
+                    </h2>
+                    <p className="text-gray-600 dark:text-gray-400 mt-2">
+                        Explore our main service concepts with quick visuals
+                    </p>
+                </div>
+                <div className="relative max-w-5xl mx-auto">
+                    <div className="overflow-hidden rounded-2xl">
+                        <motion.div
+                            key={active}
+                            initial={{ opacity: 0, x: 60 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ type: 'spring', stiffness: 120, damping: 18 }}
+                            className="relative h-56 md:h-72"
+                        >
+                            {/* Background image with a subtle gradient overlay for legibility */}
+                            <div
+                                className="absolute inset-0"
+                                aria-hidden="true"
+                                style={{
+                                    backgroundImage: `url(${conceptSlides[active].imageUrl})`,
+                                    backgroundSize: 'cover',
+                                    backgroundPosition: 'center',
+                                }}
+                                title={conceptSlides[active].alt}
+                            />
+                            <div className={`absolute inset-0 bg-gradient-to-br ${conceptSlides[active].colors} opacity-60`} />
+                            <div className="absolute inset-0 opacity-20">
+                                <div className="absolute -top-10 -left-10 w-64 h-64 bg-white rounded-full blur-3xl" />
+                                <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-black/20 rounded-full blur-3xl" />
+                            </div>
+                            <div className="relative z-10 h-full flex items-center gap-6 px-6 md:px-10 text-white">
+                                <div className="flex items-center justify-center w-16 h-16 md:w-20 md:h-20 bg-white/20 backdrop-blur-sm rounded-xl">
+                                    <ActiveIcon className="w-8 h-8 md:w-10 md:h-10" />
+                                </div>
+                                <div>
+                                    <h3 className="text-2xl md:text-3xl font-bold">
+                                        {conceptSlides[active].title}
+                                    </h3>
+                                    <p className="text-white/90 md:text-lg">
+                                        {conceptSlides[active].subtitle}
+                                    </p>
+                                    <p className="text-white/70 text-xs mt-2">Image source: Pexels</p>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </div>
+                    {/* Controls */}
+                    <div className="absolute inset-x-0 -bottom-4 flex items-center justify-between px-4">
+                        <div className="flex gap-2">
+                            {conceptSlides.map((_, i) => (
+                                <button
+                                    key={i}
+                                    aria-label={`Go to slide ${i + 1}`}
+                                    className={`w-2.5 h-2.5 rounded-full ${active === i ? 'bg-gray-900 dark:bg-white' : 'bg-gray-300 dark:bg-gray-600'}`}
+                                    onClick={() => setActive(i)}
+                                />
+                            ))}
+                        </div>
+                        <div className="flex gap-2">
+                            <Button
+                                variant="default"
+                                className="!px-3 !py-1 text-sm"
+                                onClick={() => setActive((prev) => (prev - 1 + conceptSlides.length) % conceptSlides.length)}
+                            >
+                                Prev
+                            </Button>
+                            <Button
+                                variant="solid"
+                                className="!px-3 !py-1 text-sm"
+                                onClick={() => setActive((prev) => (prev + 1) % conceptSlides.length)}
+                            >
+                                Next
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             {/* Service Categories */}
             <div className="mb-16">

@@ -5,13 +5,12 @@ import { filterWorkersByRole, useRBAC, type UserRole } from '@/utils/rbac'
 import { motion } from 'framer-motion'
 import type { Map as LeafletMap, Marker } from 'leaflet'
 import { useEffect, useRef, useState } from 'react'
-import
-    {
-        PiEnvelopeDuotone,
-        PiImageSquareDuotone,
-        PiPhoneDuotone,
-        PiStarFill
-    } from 'react-icons/pi'
+import {
+    PiEnvelopeDuotone,
+    PiImageSquareDuotone,
+    PiPhoneDuotone,
+    PiStarFill
+} from 'react-icons/pi'
 
 const availabilityColors: Record<string, string> = {
     available: 'bg-green-500',
@@ -198,34 +197,33 @@ const WorkersMap = () => {
         }
     }, [selectedZone, workers])
 
-    // Initialize map
+    // Initialize map (only when container is rendered and not in loading/error state)
     useEffect(() => {
+        let rafId: number | null = null
         const initMap = async () => {
-            if (!mapRef.current || mapInstanceRef.current) return
-
+            if (!mapRef.current || mapInstanceRef.current || loading || !!error) return
             const L = await import('leaflet')
-
-            const map = L.map(mapRef.current).setView([40.7128, -74.006], 11)
-
-            L.tileLayer(
-                'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                {
-                    attribution: '&copy; OpenStreetMap contributors',
-                }
-            ).addTo(map)
-
-            mapInstanceRef.current = map
+            try {
+                const map = L.map(mapRef.current!).setView([40.7128, -74.006], 11)
+                L.tileLayer(
+                    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    { attribution: '&copy; OpenStreetMap contributors' }
+                ).addTo(map)
+                mapInstanceRef.current = map
+            } catch (e) {
+                console.warn('Map init failed:', e)
+            }
         }
-
-        initMap()
-
+        // Defer to next frame to ensure ref is attached
+        rafId = requestAnimationFrame(() => { void initMap() })
         return () => {
+            if (rafId) cancelAnimationFrame(rafId)
             if (mapInstanceRef.current) {
                 mapInstanceRef.current.remove()
                 mapInstanceRef.current = null
             }
         }
-    }, [])
+    }, [loading, error])
 
     // Live geolocation watcher to reflect real device location
     useEffect(() => {
