@@ -1,0 +1,27 @@
+# Dockerfile.android
+FROM node:18-bullseye as build
+
+# Install required tools
+RUN apt-get update && apt-get install -y openjdk-17-jdk wget unzip git && rm -rf /var/lib/apt/lists/*
+
+# Set up Android SDK
+ENV ANDROID_SDK_ROOT /opt/android-sdk
+ENV PATH "$PATH:/opt/android-sdk/cmdline-tools/latest/bin:/opt/android-sdk/platform-tools:/opt/android-sdk/emulator"
+RUN mkdir -p $ANDROID_SDK_ROOT/cmdline-tools && \
+    wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O /tmp/cmdline-tools.zip && \
+    unzip -q /tmp/cmdline-tools.zip -d $ANDROID_SDK_ROOT/cmdline-tools && \
+    mv $ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools $ANDROID_SDK_ROOT/cmdline-tools/latest && \
+    rm /tmp/cmdline-tools.zip
+
+# Install Android SDK packages
+RUN yes | sdkmanager --licenses
+RUN sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0" "emulator"
+
+# Create user
+RUN useradd -ms /bin/bash reactnative
+WORKDIR /home/reactnative/app
+COPY --chown=reactnative:reactnative . .
+USER reactnative
+
+# Default command (overridden by docker-compose)
+CMD ["bash"]

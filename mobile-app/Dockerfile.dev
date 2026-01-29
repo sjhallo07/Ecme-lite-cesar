@@ -1,0 +1,17 @@
+# Dockerfile.dev
+FROM node:18-bullseye
+
+# Install required tools
+RUN apt-get update && apt-get install -y openjdk-17-jdk wget unzip git && rm -rf /var/lib/apt/lists/*
+
+# Create user
+RUN useradd -ms /bin/bash reactnative
+WORKDIR /home/reactnative/app
+COPY --chown=reactnative:reactnative . .
+USER reactnative
+
+# Install dependencies (for dev)
+RUN if [ -f yarn.lock ]; then yarn install --frozen-lockfile; else npm ci --legacy-peer-deps; fi
+
+EXPOSE 8081 19000 19001 19002
+CMD ["npx", "expo", "start", "--web"]
