@@ -81,5 +81,11 @@
   "powershell.buttons.showPanelMovementButtons": true,
   "powershell.sideBar.CommandExplorerVisibility": true,
   "powershell.suppressAdditionalExeNotFoundWarning": true,
-  "github.copilot.selectedCompletionModel": "Configure Code Completions"
+  "github.copilot.selectedCompletionModel": "Configure Code Completions",
+  "github.copilot.chat.languageContext.typescript.enabled": true,
+  "github.copilot.chat.githubMcpServer.readonly": true,
+  "github.copilot.chat.codesearch.enabled": true,
+  "github.copilot.chat.anthropic.useMessagesApi": true,
+  "github.copilot.chat.anthropic.tools.websearch.enabled": true,
+  "github.copilot.chat.alternateGptPrompt.enabled": true
 }

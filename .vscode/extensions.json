@@ -9,6 +9,7 @@
         "ms-vscode-remote.remote-containers",
         "infeng.vscode-react-typescript",
         "ms-vscode.powershell",
-        "wso2.apk-config-language-support"
+        "wso2.apk-config-language-support",
+        "expo.vscode-expo-tools"
     ]
 }
