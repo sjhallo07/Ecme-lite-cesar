@@ -39,3 +39,5 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# Backed-up native directory is stored one level up as android-backup-<timestamp>.zip
