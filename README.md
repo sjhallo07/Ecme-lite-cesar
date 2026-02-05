@@ -1,4 +1,4 @@
-# RepairPro - Professional Repair Services Application
+# servilogics app - Professional Repair Services Application
 
 ![IBM Logo](https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg)
 
