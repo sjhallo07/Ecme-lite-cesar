@@ -13,5 +13,46 @@
       "path": "/path/to/jdk-17",
       "default": true
     }
-  ]
+  ],
+  "chat.mcp.serverSampling": {
+    "servilogics-app/.vscode/mcp.json: io.github.github/github-mcp-server": {
+      "allowedModels": [
+        "copilot/auto",
+        "copilot/gemini-2.5-pro",
+        "copilot/gemini-3-flash-preview",
+        "copilot/gemini-3-pro-preview",
+        "copilot/gpt-4.1",
+        "copilot/gpt-4o",
+        "copilot/gpt-5",
+        "copilot/gpt-5-mini",
+        "copilot/gpt-5-codex",
+        "copilot/gpt-5.1",
+        "copilot/gpt-5.1-codex",
+        "copilot/gpt-5.1-codex-max",
+        "copilot/gpt-5.1-codex-mini",
+        "copilot/gpt-5.2",
+        "copilot/gpt-5.2-codex",
+        "copilot/grok-code-fast-1",
+        "copilot/oswe-vscode-prime"
+      ]
+    }
+  },
+  "chat.tools.terminal.autoReplyToPrompts": true,
+  "chat.todoListTool.descriptionField": true,
+  "chat.restoreLastPanelSession": true,
+  "chat.renderRelatedFiles": true,
+  "chat.mcp.discovery.enabled": {
+    "cursor-workspace": true,
+    "cursor-global": true,
+    "windsurf": true,
+    "claude-desktop": true
+  },
+  "chat.mcp.gallery.enabled": true,
+  "chat.tools.terminal.ignoreDefaultAutoApproveRules": true,
+  "chat.allowAnonymousAccess": true,
+  "chat.edits2.enabled": true,
+  "chat.mcp.assisted.nuget.enabled": true,
+  "chat.useAgentSkills": true,
+  "inlineChat.enableV2": true,
+  "inlineChat.notebookAgent": true
 }

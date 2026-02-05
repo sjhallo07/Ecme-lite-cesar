@@ -9,7 +9,8 @@
         "ms-vscode-remote.remote-containers",
         "infeng.vscode-react-typescript",
         "ms-vscode.powershell",
-        "wso2.apk-config-language-support",
-        "vscjava.vscode-java-pack"
+        "vscjava.vscode-java-pack",
+        "expo.vscode-expo-tools",
+        "vscjava.vscode-java-debug"
     ]
 }
