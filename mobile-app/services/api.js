@@ -15,7 +15,8 @@ export async function getHealth() {
 export async function getWorkers() {
   const res = await fetch(getFullUrl('workers'))
   if (!res.ok) throw new Error(`HTTP ${res.status}`)
-  return res.json()
+  const json = await res.json()
+  return json.data
 }
 
 export default { getHealth, getWorkers }
