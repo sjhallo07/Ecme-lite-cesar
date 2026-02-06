@@ -273,10 +273,10 @@ flowchart TD
 For detailed project structure and architecture information, see:
 
 - **[PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md)** - Complete directory structure, component hierarchy, data flow diagrams, and detailed documentation of all modules
-- **[ARCHITECTURE_DIAGRAMS.md](ARCHITECTURE_DIAGRAMS.md)** - Visual system architecture diagrams including component hierarchy, authentication flow, service workflows, and API architecture
 - **[STRUCTURE_QUICK_REFERENCE.md](STRUCTURE_QUICK_REFERENCE.md)** - Quick reference guide with directory tree, key components map, technology overview, and API endpoints
 
 These documents provide a comprehensive view of the entire project structure, making it easy to:
+
 - 🔍 Navigate the codebase
 - 🏗️ Understand the architecture
 - 📊 View component relationships
