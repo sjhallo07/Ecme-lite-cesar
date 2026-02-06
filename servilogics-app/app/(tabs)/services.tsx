@@ -4,8 +4,8 @@ import { FlatList, StyleSheet } from 'react-native'
 import { ThemedText } from '@/components/themed-text'
 import { ThemedView } from '@/components/themed-view'
 
-import type { Service } from '@/../services/ServicesService'
-import { getServices } from '@/../services/ServicesService'
+import type { Service } from '../../services/ServicesService'
+import { getServices } from '../../services/ServicesService'
 
 export default function ServicesScreen() {
   const [services, setServices] = useState<Service[]>([])

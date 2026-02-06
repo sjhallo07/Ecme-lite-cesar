@@ -73,5 +73,9 @@
   "github.copilot.chat.alternateGeminiModelFPrompt.enabled": true,
   "github.copilot.chat.agent.autoFix": true,
   "claudeCode.useCtrlEnterToSend": true,
-  "claudeCode.allowDangerouslySkipPermissions": true
+  "claudeCode.allowDangerouslySkipPermissions": true,
+  "react-native-tools.projectRoot": "C:\\Users\\ASUS\\app\\servilogics-app\\src",
+  "react-native.android.envFile.device": "C:\\Users\\ASUS\\app\\servilogics-app\\src",
+  "doppler.autocomplete.enable": true,
+  "doppler.hover.enable": true
 }
