@@ -23,7 +23,11 @@ export default defineConfig({
       }
     }
   },
+  esbuild: {
+    target: 'es2017'
+  },
   build: {
+    target: 'es2017',
     outDir: 'dist'
   }
 })
