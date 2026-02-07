@@ -9,6 +9,7 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
+      "bundleIdentifier": "com.servilogics.app",
       "supportsTablet": true,
       "infoPlist": {
         "NSAppTransportSecurity": {
@@ -17,6 +18,7 @@
       }
     },
     "android": {
+      "package": "com.servilogics.app",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -51,8 +53,8 @@
       "reactCompiler": true
     },
     "extra": {
-      "API_BASE_URL": "http://192.168.100.82:3001/api",
-      "WEB_APP_URL": "http://192.168.100.82:5175"
+      "API_BASE_URL": "http://192.168.100.145:3001/api",
+      "WEB_APP_URL": "http://192.168.100.145:5173"
     }
   }
 }

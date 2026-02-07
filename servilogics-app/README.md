@@ -25,6 +25,18 @@ In the output, you'll find options to open the app in a
 
 You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
+## Expo Router checklist
+
+- [ ] Install dependencies with `npm install`
+- [ ] Start the dev server with `npx expo start`
+- [ ] Confirm `package.json` uses `"main": "expo-router/entry"`
+- [ ] Ensure `app.json` includes the `expo-router` plugin
+- [ ] Verify the `app/` directory has `_layout.tsx` and route files
+- [ ] Set `ios.bundleIdentifier` and `android.package` in `app.json` for builds
+- [ ] Configure `extra.API_BASE_URL` and `extra.WEB_APP_URL` (or move them to an `app.config.js`)
+- [ ] Confirm `web.output` is `static` if you plan to export web builds
+- [ ] Run `npm run lint` before pushing changes
+
 ## Get a fresh project
 
 When you're ready, run:
