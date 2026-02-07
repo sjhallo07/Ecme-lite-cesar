@@ -1,6 +1,6 @@
 import Constants from 'expo-constants';
 import { useState } from 'react';
-import { ActivityIndicator, StyleSheet } from 'react-native';
+import { ActivityIndicator, Platform, StyleSheet } from 'react-native';
 import { WebView } from 'react-native-webview';
 
 import { ThemedView } from '@/components/themed-view';
@@ -15,6 +15,29 @@ export default function HomeScreen()
 {
   const [loading, setLoading] = useState(true);
   const webAppUrl = getWebAppUrl();
+
+  // Use iframe for web, WebView for native
+  if (Platform.OS === 'web') {
+    return (
+      <ThemedView style={styles.container}>
+        <iframe
+          src={webAppUrl}
+          style={{
+            flex: 1,
+            width: '100%',
+            height: '100%',
+            border: 'none',
+          }}
+          onLoad={() => setLoading(false)}
+        />
+        {loading && (
+          <ThemedView style={styles.loadingOverlay}>
+            <ActivityIndicator size="large" />
+          </ThemedView>
+        )}
+      </ThemedView>
+    );
+  }
 
   return (
     <ThemedView style={styles.container}>
