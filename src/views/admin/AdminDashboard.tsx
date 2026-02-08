@@ -14,6 +14,7 @@ import {
     PiVideoCameraDuotone,
     PiWarningDuotone
 } from 'react-icons/pi'
+import AdminContactBlock from '@/components/shared/AdminContactBlock'
 
 const AdminWorkersMap = () => {
     const mapRef = useRef<HTMLDivElement>(null)
@@ -486,6 +487,13 @@ const AdminDashboard = () => {
                 <p className="text-gray-500 dark:text-gray-400">
                     Manage services, workers, and customer requests
                 </p>
+            </div>
+
+            <div className="mb-6">
+                <AdminContactBlock
+                    title="Admin Contact Information"
+                    description="Use these numbers for urgent requests from clients, staff, and enterprise users."
+                />
             </div>
 
             {/* Tabs */}

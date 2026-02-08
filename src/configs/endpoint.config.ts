@@ -10,6 +10,7 @@ const endpointConfig = {
     oauthGithub: '/oauth/github',
     // Added for connectivity verification
     health: '/health',
+    settingsContact: '/settings/contact',
     workers: '/workers',
     inventory: '/inventory/items',
 }

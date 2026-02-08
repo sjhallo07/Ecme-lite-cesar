@@ -12,7 +12,8 @@
         "adminMenu": {
             "adminMenu": "Admin",
             "dashboard": "Admin Dashboard",
-            "inventory": "Inventory"
+            "inventory": "Inventory",
+            "settings": "Admin Settings"
         },
         "infoMenu": {
             "infoMenu": "Information",

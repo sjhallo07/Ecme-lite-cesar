@@ -8,6 +8,7 @@ import
     } from 'react-icons/pi'
 import { workersData } from '@/data/services.data'
 import Button from '@/components/ui/Button'
+import AdminContactBlock from '@/components/shared/AdminContactBlock'
 import type { Worker } from '@/@types/services'
 import type { Map as LeafletMap, Marker } from 'leaflet'
 
@@ -204,6 +205,13 @@ const WorkersMap = () =>
                 <p className="text-gray-500 dark:text-gray-400">
                     Browse available service workers by zone
                 </p>
+            </div>
+
+            <div className="mb-6">
+                <AdminContactBlock
+                    title="Contact Admins"
+                    description="Reach the admin team for client, staff, or enterprise support."
+                />
             </div>
 
             {/* Zone Filter */}

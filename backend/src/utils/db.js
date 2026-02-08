@@ -223,3 +223,35 @@ export function getDefaultWorkers() {
 export async function updateWorkerLastSeenDb(id) {
   return updateWorkerDb(id, { lastSeen: Date.now() });
 }
+
+// ----- Settings collection helpers -----
+
+async function settingsCollection() {
+  await connectMongo();
+  return getCollection(process.env.MONGODB_COLLECTION_SETTINGS || 'settings');
+}
+
+export async function getSettingDb(key) {
+  const col = await settingsCollection();
+  return col.findOne({ key });
+}
+
+export async function upsertSettingDb(key, value) {
+  const col = await settingsCollection();
+  const timestamp = new Date().toISOString();
+  const res = await col.findOneAndUpdate(
+    { key },
+    {
+      $set: {
+        key,
+        value,
+        updatedAt: timestamp,
+      },
+      $setOnInsert: {
+        createdAt: timestamp,
+      },
+    },
+    { upsert: true, returnDocument: 'after' },
+  );
+  return res.value;
+}

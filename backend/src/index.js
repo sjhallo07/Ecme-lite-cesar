@@ -29,6 +29,7 @@ import agentRouter from './routes/agent.js'
 import inventoryRouter from './routes/inventory.js'
 import servicesRouter from './routes/services.js'
 import workersRouter from './routes/workers.js'
+import settingsRouter from './routes/settings.js'
 
 dotenv.config()
 
@@ -44,6 +45,7 @@ app.use('/api', agentRouter)
 app.use('/api/inventory', inventoryRouter)
 app.use('/api/services', servicesRouter)
 app.use('/api/workers', workersRouter)
+app.use('/api/settings', settingsRouter)
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

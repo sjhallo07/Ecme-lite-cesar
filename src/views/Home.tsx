@@ -1,6 +1,7 @@
 import type { Service } from '@/@types/services'
 import HealthStatus from '@/components/shared/HealthStatus'
 import Button from '@/components/ui/Button'
+import AdminContactBlock from '@/components/shared/AdminContactBlock'
 import { servicesData } from '@/data/services.data'
 import { getServices } from '@/services/ServicesService'
 import { useCurrencyStore } from '@/store/currencyStore'
@@ -424,6 +425,12 @@ const Home = () =>
             </div>
 
             {/* CTA Section */}
+            <div className="mb-8">
+                <AdminContactBlock
+                    title="Contact Admin Team"
+                    description="Reach our admins directly for client, staff, and enterprise support."
+                />
+            </div>
             <motion.div
                 className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-8 md:p-12 text-center"
                 initial={{ opacity: 0, y: 20 }}

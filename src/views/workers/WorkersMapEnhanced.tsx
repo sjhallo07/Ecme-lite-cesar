@@ -1,5 +1,6 @@
 import type { Worker as WorkerProfile } from '@/@types/services'
 import Button from '@/components/ui/Button'
+import AdminContactBlock from '@/components/shared/AdminContactBlock'
 import WorkerService from '@/services/WorkerService'
 import { filterWorkersByRole, useRBAC, type UserRole } from '@/utils/rbac'
 import { motion } from 'framer-motion'
@@ -474,6 +475,13 @@ const WorkersMap = () => {
                         {locationError}
                     </p>
                 )}
+            </div>
+
+            <div className="mb-6">
+                <AdminContactBlock
+                    title="Contact Admins"
+                    description="Reach the admin team for client, staff, or enterprise support."
+                />
             </div>
 
             {/* Zone Filter */}

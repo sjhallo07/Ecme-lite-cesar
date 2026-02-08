@@ -12,7 +12,8 @@
         "adminMenu": {
             "adminMenu": "Administrador",
             "dashboard": "Panel de Administración",
-            "inventory": "Inventario"
+            "inventory": "Inventario",
+            "settings": "Configuración de Administrador"
         },
         "infoMenu": {
             "infoMenu": "Información",

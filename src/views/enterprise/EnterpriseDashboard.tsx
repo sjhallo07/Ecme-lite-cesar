@@ -8,6 +8,7 @@ import {
     PiLockKeyDuotone,
 } from 'react-icons/pi'
 import Button from '@/components/ui/Button'
+import AdminContactBlock from '@/components/shared/AdminContactBlock'
 
 const features = [
     {
@@ -153,6 +154,12 @@ const EnterpriseDashboard = () => {
                     <Button variant="default">
                         Schedule a Demo
                     </Button>
+                </div>
+                <div className="mt-8">
+                    <AdminContactBlock
+                        title="Enterprise Admin Contacts"
+                        description="Reach our admin team directly for enterprise onboarding and support."
+                    />
                 </div>
             </motion.div>
 

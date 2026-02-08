@@ -16,7 +16,8 @@
         "ms-vscode.vscode-typescript-next",
         "esbenp.prettier-vscode",
         "ms-azuretools.vscode-docker",
-        "GitHub.copilot-chat"
+        "GitHub.copilot-chat",
+        "mongodb.mongodb-vscode"
       ],
       "settings": {
         "files.autoSave": "onFocusChange",

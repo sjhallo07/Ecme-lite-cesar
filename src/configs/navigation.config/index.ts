@@ -107,6 +107,16 @@ const navigationConfig: NavigationTree[] = [
                 authority: ['admin'],
                 subMenu: [],
             },
+            {
+                key: 'adminMenu.settings',
+                path: '/admin/settings',
+                title: 'Admin Settings',
+                translateKey: 'nav.adminMenu.settings',
+                icon: 'settings',
+                type: NAV_ITEM_TYPE_ITEM,
+                authority: ['admin'],
+                subMenu: [],
+            },
         ],
     },
     {

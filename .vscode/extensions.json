@@ -5,14 +5,16 @@
         "msjsdiag.vscode-react-native",
         "github.copilot",
         "github.copilot",
-        "github.copilot-chat",
-        "ms-vscode-remote.remote-containers",
-        "infeng.vscode-react-typescript",
         "vscjava.vscode-java-pack",
         "expo.vscode-expo-tools",
         "vscjava.vscode-java-debug",
         "redhat.vscode-commons",
         "redhat.project-initializer",
-        "doppler.doppler-vscode"
+        "doppler.doppler-vscode",
+        "mongodb.mongodb-vscode",
+        "vscjava.vscode-java-upgrade",
+        "vscjava.vscode-gradle",
+        "vscjava.vscode-maven",
+        "ms-vscode.powershell"
     ]
 }

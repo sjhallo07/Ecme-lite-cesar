@@ -15,39 +15,10 @@ import {
 import Button from '@/components/ui/Button'
 import Input from '@/components/ui/Input'
 import Alert from '@/components/ui/Alert'
-
-const contactInfo = [
-    {
-        icon: PiMapPinDuotone,
-        title: 'Our Office',
-        details: ['123 Repair Street', 'Service City, SC 12345'],
-    },
-    {
-        icon: PiPhoneDuotone,
-        title: 'Phone Numbers',
-        details: ['Main: +1 (555) 123-4567', 'Emergency: +1 (555) 987-6543'],
-    },
-    {
-        icon: PiEnvelopeDuotone,
-        title: 'Email Us',
-        details: ['info@repairpro.com', 'support@repairpro.com'],
-    },
-    {
-        icon: PiClockDuotone,
-        title: 'Working Hours',
-        details: ['Mon - Fri: 8:00 AM - 6:00 PM', 'Sat - Sun: 9:00 AM - 4:00 PM'],
-    },
-]
-
-const socialLinks = [
-    { icon: PiWhatsappLogoDuotone, href: 'https://wa.me/15551234567', label: 'WhatsApp', color: 'hover:bg-green-500 hover:text-white' },
-    { icon: PiFacebookLogoDuotone, href: 'https://facebook.com/repairpro', label: 'Facebook', color: 'hover:bg-blue-600 hover:text-white' },
-    { icon: PiTwitterLogoDuotone, href: 'https://twitter.com/repairpro', label: 'Twitter', color: 'hover:bg-sky-500 hover:text-white' },
-    { icon: PiInstagramLogoDuotone, href: 'https://instagram.com/repairpro', label: 'Instagram', color: 'hover:bg-pink-500 hover:text-white' },
-    { icon: PiLinkedinLogoDuotone, href: 'https://linkedin.com/company/repairpro', label: 'LinkedIn', color: 'hover:bg-blue-700 hover:text-white' },
-]
+import useAdminContacts from '@/hooks/useAdminContacts'
 
 const Contact = () => {
+    const { contactNumbers } = useAdminContacts()
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -57,6 +28,42 @@ const Contact = () => {
     })
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [isSuccess, setIsSuccess] = useState(false)
+
+    const contactInfo = [
+        {
+            icon: PiMapPinDuotone,
+            title: 'Our Office',
+            details: ['123 Repair Street', 'Service City, SC 12345'],
+        },
+        {
+            icon: PiPhoneDuotone,
+            title: 'Phone Numbers',
+            details: contactNumbers.map((contact) => `${contact.label}: ${contact.display}`),
+        },
+        {
+            icon: PiEnvelopeDuotone,
+            title: 'Email Us',
+            details: ['info@repairpro.com', 'support@repairpro.com'],
+        },
+        {
+            icon: PiClockDuotone,
+            title: 'Working Hours',
+            details: ['Mon - Fri: 8:00 AM - 6:00 PM', 'Sat - Sun: 9:00 AM - 4:00 PM'],
+        },
+    ]
+
+    const socialLinks = [
+        {
+            icon: PiWhatsappLogoDuotone,
+            href: contactNumbers[0]?.whatsapp,
+            label: 'WhatsApp',
+            color: 'hover:bg-green-500 hover:text-white',
+        },
+        { icon: PiFacebookLogoDuotone, href: 'https://facebook.com/repairpro', label: 'Facebook', color: 'hover:bg-blue-600 hover:text-white' },
+        { icon: PiTwitterLogoDuotone, href: 'https://twitter.com/repairpro', label: 'Twitter', color: 'hover:bg-sky-500 hover:text-white' },
+        { icon: PiInstagramLogoDuotone, href: 'https://instagram.com/repairpro', label: 'Instagram', color: 'hover:bg-pink-500 hover:text-white' },
+        { icon: PiLinkedinLogoDuotone, href: 'https://linkedin.com/company/repairpro', label: 'LinkedIn', color: 'hover:bg-blue-700 hover:text-white' },
+    ]
 
     const handleInputChange = (field: string, value: string) => {
         setFormData((prev) => ({ ...prev, [field]: value }))
@@ -246,7 +253,7 @@ const Contact = () => {
                             {socialLinks.map((social) => (
                                 <a
                                     key={social.label}
-                                    href={social.href}
+                                    href={social.href || '#'}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className={`p-3 bg-gray-100 dark:bg-gray-700 rounded-xl text-gray-600 dark:text-gray-400 transition-all ${social.color}`}
@@ -257,18 +264,25 @@ const Contact = () => {
                             ))}
                         </div>
                         <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                            <a
-                                href="https://wa.me/15551234567"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center gap-3 p-3 bg-green-50 dark:bg-green-900/30 rounded-xl text-green-600 dark:text-green-400 hover:bg-green-100 dark:hover:bg-green-900/50 transition-colors"
-                            >
-                                <PiWhatsappLogoDuotone className="w-8 h-8" />
-                                <div>
-                                    <p className="font-medium">Chat on WhatsApp</p>
-                                    <p className="text-sm opacity-80">Quick response guaranteed</p>
-                                </div>
-                            </a>
+                            <div className="space-y-3">
+                                {contactNumbers.map((contact) => (
+                                    <a
+                                        key={contact.phone}
+                                        href={contact.whatsapp}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center gap-3 p-3 bg-green-50 dark:bg-green-900/30 rounded-xl text-green-600 dark:text-green-400 hover:bg-green-100 dark:hover:bg-green-900/50 transition-colors"
+                                    >
+                                        <PiWhatsappLogoDuotone className="w-8 h-8" />
+                                        <div>
+                                            <p className="font-medium">Chat on WhatsApp</p>
+                                            <p className="text-sm opacity-80">
+                                                {contact.display}
+                                            </p>
+                                        </div>
+                                    </a>
+                                ))}
+                            </div>
                         </div>
                     </motion.div>
                 </div>
